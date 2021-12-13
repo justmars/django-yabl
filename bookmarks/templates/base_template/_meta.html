@@ -1,0 +1,8 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% if metadata %}
+    {{ metadata }}
+{% else %}
+    <meta name="description" content="Sample description "> <!-- # Customize content for search -->
+    {% block title %}<title>bookmark and tag sample</title> {% endblock title %}<!-- Enable title changes -->
+{% endif %}

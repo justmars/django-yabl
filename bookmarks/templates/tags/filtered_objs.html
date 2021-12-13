@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Objects tagged | BrandX  {% endblock title %}
+
+{% block content %}
+<main>
+    <vstack spacing=s>
+        <center>
+            <h1>
+                {% if model_type %}<mark>{{model_type.name}}</mark>{% endif %}
+                tagged <mark>{{tag_slug}}</mark>
+            </h1>
+            {% if user.is_authenticated %}
+                <p>You're logged in as {{user}}</p>
+            {% else %}
+                {% load account %}
+                <p><a href="{% url 'account_login' %}">Login</a> to view / add tags.</p>
+            {% endif %}
+        </center>
+
+        {% for obj in user_tagged_objs %}
+            {% if forloop.first %}
+                <hstack spacing=m>
+                    <em>Object Tagged</em>
+                    <spacer></spacer>
+                    <em>Type of Object</em>
+                </hstack>
+            {% endif %}
+            <hstack spacing=m>
+                <span>{{obj.content_object}}</span>
+                {% if user.is_authenticated %}
+                    {{obj.content_object.modal}}
+                {% endif %}
+                <spacer></spacer>
+                <span>{{obj.content_type.name}}</span>
+            </hstack>
+        {% endfor %}
+    </vstack>
+</main>
+{% endblock content %}

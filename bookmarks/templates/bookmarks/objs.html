@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} Objects tagged | BrandX  {% endblock title %}
+
+{% block content %}
+<main>
+    <vstack spacing=s>
+        <center>
+            <h1>Your bookmarks</h1>
+            {% if not user.is_authenticated %}
+                {% load account %}
+                <p><a href="{% url 'account_login' %}">Log in</a> to see saved objects you've tagged.</p>
+            {% endif %}
+        </center>
+
+        {% for obj in bookmarked_objs %}
+            {% if forloop.first %}
+                <hstack spacing=m>
+                    <em>Object bookmarked</em>
+                    <spacer></spacer>
+                    <em>Type of Object</em>
+                </hstack>
+            {% endif %}
+            <hstack spacing=m>
+                <span>{{obj.content_object}}</span>
+                {% if user.is_authenticated %}
+                    {{obj.content_object.modal}}
+                {% endif %}
+                <spacer></spacer>
+                <span>{{obj.content_type.name}}</span>
+            </hstack>
+        {% endfor %}
+    </vstack>
+</main>
+{% endblock content %}

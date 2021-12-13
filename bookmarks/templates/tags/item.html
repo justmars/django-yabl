@@ -1,0 +1,8 @@
+{% if count %}
+    {% url "bookmarks:filtered_objs" tag.name idx as model_tag_url %}
+    <span>
+        <a href="{{model_tag_url}}">
+            {{slug}}
+        </a>: {{count}}
+    </span>
+{% endif %}

@@ -1,0 +1,200 @@
+- model: auth.user
+  pk: 1
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: locke
+    first_name: Scott
+    last_name: Lynch
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.650528+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kal
+    first_name: Brandon
+    last_name: Sanderson
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.653526+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 3
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kvothe
+    first_name: Patrick
+    last_name: Rothfuss
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.654816+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 4
+  fields:
+    password: pbkdf2_sha256$320000$0oQ5cPh2Opp4CT9jOcU2RX$Te84biDZvXeHCdsgbdhw/N+qoqMJQAPif2gHIBRKD2E=
+    last_login: 2021-12-12 02:57:39.604489+00:00
+    is_superuser: false
+    username: mv
+    first_name: ""
+    last_name: ""
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-12 02:57:39.301652+00:00
+    groups: []
+    user_permissions: []
+- model: bookmarks.tagitem
+  pk: 1
+  fields:
+    created: 2021-12-12 02:58:01.742467+00:00
+    modified: 2021-12-12 02:58:01.742505+00:00
+    name: high-fantasy
+- model: bookmarks.tagitem
+  pk: 2
+  fields:
+    created: 2021-12-12 02:58:22.386121+00:00
+    modified: 2021-12-12 02:58:22.386158+00:00
+    name: young-adult
+- model: bookmarks.tagitem
+  pk: 3
+  fields:
+    created: 2021-12-12 02:58:36.539343+00:00
+    modified: 2021-12-12 02:58:36.539382+00:00
+    name: warfare
+- model: bookmarks.tagitem
+  pk: 4
+  fields:
+    created: 2021-12-12 02:58:46.804942+00:00
+    modified: 2021-12-12 02:58:46.804987+00:00
+    name: vanity
+- model: bookmarks.tagitem
+  pk: 5
+  fields:
+    created: 2021-12-12 02:58:56.807388+00:00
+    modified: 2021-12-12 02:58:56.807426+00:00
+    name: freedom
+- model: bookmarks.bookmark
+  pk: 1
+  fields:
+    created: 2021-12-12 02:58:01.668414+00:00
+    modified: 2021-12-12 02:58:01.668452+00:00
+    bookmarker: 4
+    content_type: 15
+    object_id: "1"
+    tags:
+      - 1
+- model: bookmarks.bookmark
+  pk: 2
+  fields:
+    created: 2021-12-12 02:58:09.000204+00:00
+    modified: 2021-12-12 02:58:09.000241+00:00
+    bookmarker: 4
+    content_type: 15
+    object_id: "2"
+    tags:
+      - 1
+- model: bookmarks.bookmark
+  pk: 3
+  fields:
+    created: 2021-12-12 02:58:22.302519+00:00
+    modified: 2021-12-12 02:58:22.302556+00:00
+    bookmarker: 4
+    content_type: 15
+    object_id: "3"
+    tags:
+      - 2
+- model: bookmarks.bookmark
+  pk: 4
+  fields:
+    created: 2021-12-12 02:58:36.466242+00:00
+    modified: 2021-12-12 02:58:36.466279+00:00
+    bookmarker: 4
+    content_type: 16
+    object_id: 5ca2c0c2-314c-4a4e-bc00-9cf3c7f001df
+    tags:
+      - 3
+- model: bookmarks.bookmark
+  pk: 5
+  fields:
+    created: 2021-12-12 02:58:46.703010+00:00
+    modified: 2021-12-12 02:58:46.703049+00:00
+    bookmarker: 4
+    content_type: 16
+    object_id: 83e0f8a4-a2c0-4be8-900a-d05b83deef3a
+    tags:
+      - 4
+      - 1
+- model: bookmarks.bookmark
+  pk: 6
+  fields:
+    created: 2021-12-12 02:58:56.733556+00:00
+    modified: 2021-12-12 02:58:56.733595+00:00
+    bookmarker: 4
+    content_type: 16
+    object_id: f0e7a616-046e-4c3d-88e8-b4d99fd8f2f7
+    tags:
+      - 5
+      - 1
+- model: examples.samplebook
+  pk: 1
+  fields:
+    title: Gentleman Bastards
+    excerpt: A story about a thief
+    author: 1
+- model: examples.samplebook
+  pk: 2
+  fields:
+    title: Stormlight Archives
+    excerpt: A story about a soldier
+    author: 2
+- model: examples.samplebook
+  pk: 3
+  fields:
+    title: Name of the Wind
+    excerpt: A story about a student
+    author: 3
+- model: examples.samplequote
+  pk: 5500a731-7682-4157-9f26-19412e44c560
+  fields:
+    book: 1
+    quote:
+      “Truthfully,” whispered Locke, “I have never desired a capa’s power, because
+      I would never want a capa’s problems.”
+- model: examples.samplequote
+  pk: 5ca2c0c2-314c-4a4e-bc00-9cf3c7f001df
+  fields:
+    book: 2
+    quote:
+      “I like to learn to use the local weapons,” Mraize said. “It is a quirk,
+      though I feel it is justified. If you want to understand a people, learn their
+      weapons. The way men kill one another says far more about a culture than any
+      scholar’s ethnography.”
+- model: examples.samplequote
+  pk: 83e0f8a4-a2c0-4be8-900a-d05b83deef3a
+  fields:
+    book: 3
+    quote:
+      "let us assume I am the center of creation. In doing this, let us pass
+      over innumerable boring stories: the rise and fall of empires, sagas of heroism,
+      ballads of tragic love. Let us hurry forward to the only tale of any real importance.”
+      His smile broadened. “Mine.”"
+- model: examples.samplequote
+  pk: f0e7a616-046e-4c3d-88e8-b4d99fd8f2f7
+  fields:
+    book: 1
+    quote: There’s no freedom quite like the freedom of being constantly underestimated,

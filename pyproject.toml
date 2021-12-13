@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "django-yabl"
+version = "0.0.1"
+description = "Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models."
+authors = ["Marcelino G. Veloso III <mars@veloso.one>"]
+readme = "README.md"
+repository = "https://github.com/justmars/django-yabl"
+license = "MIT"
+packages = [
+    { include = "bookmarks" }, # because django-yabl differs from bookmarks
+    { include = "examples" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.0"
+django-extensions = "^3.1.5"
+django-debug-toolbar = "^3.2.2"
+django-allauth = "^0.47.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+pytest-django = "^4.5.2"
+pytest-instafail = "^0.4.2"
+pytest-sugar = "^0.9.4"
+pytest-icdiff = "^0.5"
+pytest-cov = "^2.12.1"
+mypy = "^0.902"
+black = "^21.12b0"
+isort = "^5.10.1"
+pre-commit = "^2.16.0"
+ipykernel = "^6.6.0"
+tqdm = "^4.62"
+PyYAML = "^6.0"
+
+
+
+[tool.pytest]
+DJANGO_SETTINGS_MODULE = "config.settings" # depends on project root
+minversion = "6.0"
+addopts = "--ds=config.settings"
+testpaths = ["tests"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 79
+include_trailing_comma = 'True'
+
+[tool.black]
+line-length = 79
+include = '.pyi?$'
+exclude = '''
+/(
+    .git
+    | .hg
+    | .mypy_cache
+    | .tox
+    | .venv
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
+
+
+[build-system]
+requires = ["poetry-core>=1.1.12"]
+build-backend = "poetry.core.masonry.api"

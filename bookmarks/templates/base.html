@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include './base_template/_meta.html' %}
+        {% include './base_template/_favicons.html' %}
+        {% block custom_css %}
+            {% load static %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/throbber.css' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'css/modal.css' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'css/starter.css' %}">
+            <link rel="stylesheet" href="https://unpkg.com/pyloncss@latest/css/pylon.css">
+        {% endblock custom_css %}
+    </head>
+    <body>
+        {% include './base_template/_nav.html' %}
+        {% include './base_template/_messages.html' %}
+        {% block body %}
+            {% block content %}
+            {% endblock content %}
+            {% block base_js %}
+                <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+                <script src="https://unpkg.com/hyperscript.org@0.9.0"></script>
+                <script>document.body.addEventListener("htmx:configRequest", (e) => {e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";});</script>
+            {% endblock base_js %}
+        {% endblock body %}
+    </body>
+</html>

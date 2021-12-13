@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} User tag list | BrandX  {% endblock title %}
+
+{% block content %}
+<center>
+    <h1>Your Tags</h1>
+    {% if not user.is_authenticated %}
+        {% load account %}
+        <p><a href="{% url 'account_login' %}">Log in</a> to see saved objects you've tagged.</p>
+    {% endif %}
+</center>
+<vstack spacing=s>
+    {% for tag in tags %}
+        <hstack spacing=s>
+            <span>
+                <a href="{% url 'bookmarks:filtered_objs' tag.name %}">{{tag.name}}</a>
+            </span>
+            <spacer></spacer>
+            {% include './item.html' with count=tag.samplebook_count slug=tag.samplebook_slug idx=tag.samplebook_id %}
+            {% include './item.html' with count=tag.samplequote_count slug=tag.samplequote_slug idx=tag.samplequote_id %}
+        </hstack>
+    {% empty %}
+        {% if user.is_authenticated %}
+            <h3> No tags supplied. </h3>
+        {% endif %}
+    {% endfor %}
+</vstack>
+{% endblock content %}

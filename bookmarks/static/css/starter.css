@@ -1,0 +1,72 @@
+/* body */
+body {
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
+}
+
+/* nav links */
+nav a {
+  text-decoration: none;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* headings */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* see https://www.joshwcomeau.com/css/custom-css-reset */
+  overflow-wrap: break-word;
+}
+
+/* media */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  /* see https://blog.logrocket.com/how-to-style-forms-with-css-a-beginners-guide/ */
+  min-width: 100%; /* prevents the overflow when just using width */
+  max-width: 100%; /* prevents the overflow when just using width */
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+}
+
+p.help-block {
+  /* crispy forms creates form helper text with <p> */
+  position: relative;
+  top: -15px;
+  font-size: 14px;
+  font-style: italic;
+  color: gray;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+}

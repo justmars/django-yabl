@@ -1,0 +1,52 @@
+<!-- components below revises the targeted <section> as the 'closest section' -->
+<section>
+    {{object_content_for_panel}}
+    <hstack spacing=s>
+        {% for tag in user_tags %}
+            <small id="tag-{{tag.pk}}">
+                <a href="{% url 'bookmarks:filtered_objs' tag.name %}">{{tag.name}}</a> <!-- list tags with ability to delete each -->
+                <span
+                    hx-trigger="click"
+                    hx-confirm="Are you sure you want to delete this?"
+                    hx-delete="{{del_tag_url}}?tag={{tag.name}}"
+                    hx-swap="none"
+                    _="on tagDeleted transition opacity to 0 then remove #tag-{{tag.pk}}"
+                ><strong><em>x</em></strong></span>
+            </small>
+        {% endfor %}
+        {% if user_tags %}<br><br>{% endif %}
+    </hstack>
+
+    <hstack spacing=s align-x=right>
+        <form>
+            <input
+                name="tags"
+                placeholder="Comma-separated tags."
+                aria-label="Add your tags here..."
+                onfocus=this.value=''
+            >
+            <button
+                type="submit"
+                hx-post="{{add_tags_url}}"
+                hx-target="closest section"
+                hx-swap="outerHTML"
+            >Add <!-- add tags to a bookmarked model instance -->
+            </button>
+        </form>
+
+        <spacer></spacer>
+
+        <input
+            hx-trigger="change"
+            hx-put="{{toggle_url}}"
+            hx-target="closest section"
+            type="checkbox"
+            {% if is_bookmarked %}
+                checked
+                hx-confirm="Delete tags associated with this bookmark?"
+            {% endif %}
+        >
+            Bookmark  <!-- toggle bookmark form -->
+        </input>
+    </hstack>
+</section>
