@@ -22,7 +22,7 @@ Placed here for easier access in configuration and tests)
 MODAL_BASE = "commons/modal.html"
 PANEL = "tags/panel.html"
 LIST_BOOKMARKED = "bookmarks/objs.html"
-LIST_TAGS = "tags/tags.html"
+LIST_TAGS = "tags/annotation/tags.html"
 LIST_FILTERED = "tags/filtered_objs.html"
 
 """
