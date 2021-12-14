@@ -19,6 +19,7 @@ django-debug-toolbar = "^3.2.2"
 django-allauth = "^0.47.0"
 
 [tool.poetry.dev-dependencies]
+djhtml = "^1.4.10"
 pytest = "^6.2.5"
 pytest-django = "^4.5.2"
 pytest-instafail = "^0.4.2"
