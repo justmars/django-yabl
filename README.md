@@ -54,6 +54,7 @@ Specifically the following attributes are enabled:
 INSTALLED_APPS = [
     ...
     # for authentication purposes only
+    "django.contrib.sites", # need by allauth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -117,6 +118,12 @@ urlpatterns = [
 ]
 ```
 
+### Ensure base.html requisites
+
+1. `htmx`/`hyperscript`
+2. `modal.css` for loading modals
+3. `<nav>` contains `allauth` tags
+
 ### Run migration
 
 ```zsh
@@ -149,6 +156,7 @@ Add an `AbstractBookmarkable` mixin to the models.py:
 
 ```python
 # examples/models.py
+from bookmarks.models import AbstractBookmarkable
 class SampleBook(AbstractBookmarkable):
     ...
 ```
@@ -265,7 +273,7 @@ So in the `SampleBook` model example above, since model is contained in the `exa
 # examples/urls.py
 from .views import SAMPLEBOOK
 app_name = "examples" #  = SampleBook.objects.get(pk=1)._meta.app_label
-urlpatterns = (SAMPLEBOOK.make_patterns())
+urlpatterns =   SAMPLEBOOK.make_patterns() + [..., ] # add the method to the original list
 ```
 
 The reason for the matching requirement is that `django.urls.reverse()` functions will rely on this convention to call urls from the object instance with a pre-determined property value, e.g.:
@@ -279,7 +287,74 @@ The reason for the matching requirement is that `django.urls.reverse()` function
 '/samplequote/launch_modal/5500a731-7682-4157-9f26-19412e44c560'
 ```
 
-### Override tags/tags.html
+### Place launch modal url in appropriate template
+
+One of the paths created in `make_patterns()` is the `launch_modal` path which can be customized by the model's `@modal` property.
+
+```python
+class SampleBook(AbstractBookmarkable)
+    ...
+
+    @property
+    def modal(self) -> SafeText:
+        """Return html with htmx modal launcher based on app_name. Presumes prior coordination with bookmarks.utils in urls.py"""
+        return format_html(
+            """<em hx-trigger="click"
+                hx-get="{url}"
+                hx-target="body"
+                hx-swap="beforeend"
+                hx-indicator="#{loader_id}"
+                _="on mouseover add [@style=text-decoration:underline] to me
+                    on mouseleave remove [@style=text-decoration:underline] from me
+                "
+                >view
+                    <span id="{loader_id}" class="throbber-loader htmx-indicator">Loading...</span>
+                </em>
+            """,
+            loader_id=f"spinner-{self.pk}",
+            url=self.launch_modal_url,
+        )
+```
+
+In the template:
+
+```jinja
+<h2>{{header}}</h2>
+<ul>
+    {% for obj in obj_list %}
+        <li>
+            {{obj}}
+            {% if user.is_authenticated %}
+                {{obj.modal}} <!-- this is a model property that, when clicked, will launch a modal -->
+            {% endif %}
+        </li>
+    {% empty %}
+        <h3> No {{header|lower}} supplied. </h3>
+    {% endfor %}
+</ul>
+```
+
+### Setup URL nav to all user subscriptions
+
+```jinja
+<nav>
+    ...
+    <a href="{% url 'bookmarks:bookmarked_objs' %}">Saved</a>
+</nav>
+```
+
+### Setup URL nav to all user-made tags
+
+```jinja
+<nav>
+    ...
+     <a href="{% url 'bookmarks:annotated_tags' %}">Tags</a>
+</nav> <!-- this will lead to the tags/tags.html which must be overriden -->
+```
+
+### Override app/tags/tags.html in root templates/tags/tags.html
+
+Look for `bookmark/tags/tags.html` and copy its contents to `templates/tags/tags.html`.
 
 In the `examples` app, we declared two `AbstractBookmarkable` models: `SampleBook` and `SampleQuote`.
 
