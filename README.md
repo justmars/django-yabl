@@ -30,8 +30,15 @@ Specifically the following attributes are enabled:
 | @`toggle_status_url`              | URL to toggle bookmark status of an object instance added  |
 | @`object_content_for_panel`       | Content when custom modal is loaded; **must** be overriden |
 
+## Base
+
+1. The [base.html](./templates/base.html) uses the htmx/hyperscript example [modal.css](./examples/static/css/modal.css) and a bespoke [starter.css](./examples/static/css/starter.css) declared in an _app-level_ static folder.
+2. The _app-level_ [modal.html](./bookmarks/templates/commons/modal.html) displays custom modals via htmx click.
+3. The _app-level_ [panel.html](./tags/templates/tags/panel.html) provides content displayed within custom modals.
+4. The modal is where backend actions – i.e. toggle bookmark status, add tags, remove tag – become operational.
+
 ## Setup
 
 1. Download and [install](bookmarks/docs/setup.md).
 2. See [configuration](bookmarks/docs/configure.md) of models to be bookmarked and tagged.
-3. Consider [frontend](bookmarks/docs/fronend.md) setup using `htmx/hyperscript`.
+3. Examine [frontend](bookmarks/docs/frontend.md) setup using `htmx/hyperscript`.

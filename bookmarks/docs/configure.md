@@ -163,9 +163,9 @@ class SampleBook(AbstractBookmarkable)
 2. See `class="throbber-loader htmx-indicator">Loading...</span>`
 3. See `loader_id=f"spinner-{self.pk}"`
 
-## Position launcher in template
+## Add modal element, ensure authenticated
 
-If desired to place the modal in a list view, consider the following example:
+If desired to place the `@modal` in a list view, consider the following example:
 
 ```jinja
 <h2>{{header}}</h2>
@@ -173,8 +173,11 @@ If desired to place the modal in a list view, consider the following example:
     {% for obj in obj_list %}
         <li>
             {{obj}}
+
+            <!-- need to check if user is logged in before enabling a model property that, when clicked, will launch a modal -->
+
             {% if user.is_authenticated %}
-                {{obj.modal}} <!-- this is a model property that, when clicked, will launch a modal -->
+                {{obj.modal}}
             {% endif %}
         </li>
     {% empty %}
@@ -219,3 +222,13 @@ The `annotated_tags()` view gets implementing classes of `AbstractBookmarkable` 
 Still exploring best way to display this annotated list of tags in the template.
 
 For now, override the `tags/tagged_models.html` template, replacing `samplebook` and `samplequote`, the _verbose model names_ of the implementing classes, with your selected models.
+
+## Overrides styles
+
+1. Modify `base.html` to use [insert _framework_ here].
+2. Declare root-level `templates` directory, add the present subdirectories here:
+   - `templates/bookmarks`
+   - `templates/commons`
+   - `templates/tags`
+3. Copy and paste the _app-level_ `panel.html` into the directory created in (2.)
+4. Style the root-level `panel.html` based on inserted _framework_.
