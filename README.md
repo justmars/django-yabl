@@ -10,11 +10,11 @@ The `AbstractBookmarkable` contains a `bookmarks` field mapped to a generic `Boo
 
 [^1]: The model is referenced via a `content_type` and an `object_id`
 
-This abstraction makes each instance _bookmarkable_ and _taggable_ by users.
+## AbstractBookmarkable
 
-Specifically the following attributes are enabled:
+The abstraction makes each instance _bookmarkable_ and _taggable_ by authenticated users.
 
-| Attribute                         | Purpose                                                    |
+| Attributes                        | Purpose                                                    |
 | --------------------------------- | ---------------------------------------------------------- |
 | `is_bookmarked`(user)             | Check whether object instance is bookmarked or not         |
 | `get_bookmarked`(user)            | Get instances of model that user has bookmarked            |
@@ -30,11 +30,13 @@ Specifically the following attributes are enabled:
 | @`toggle_status_url`              | URL to toggle bookmark status of an object instance added  |
 | @`object_content_for_panel`       | Content when custom modal is loaded; **must** be overriden |
 
-## Base
+## Modal-based UX
 
-1. The [base.html](./templates/base.html) uses the htmx/hyperscript example [modal.css](./examples/static/css/modal.css) and a bespoke [starter.css](./examples/static/css/starter.css) declared in an _app-level_ static folder.
-2. The _app-level_ [modal.html](./bookmarks/templates/commons/modal.html) displays custom modals via htmx click.
-3. The _app-level_ [panel.html](./tags/templates/tags/panel.html) provides content displayed within custom modals.
+1. The _app-level_ [base.html](bookmarks/templates/base.html) uses:
+   - the htmx/hyperscript example [modal.css](bookmarks/static/css/modal.css); and
+   - a bespoke [starter.css](bookmarks/static/css/starter.css)
+2. The _app-level_ [modal.html](bookmarks/templates/commons/modal.html) shows a modal via htmx click.
+3. The _app-level_ [panel.html](bookmarks/templates/tags/templates/tags/panel.html) shows content displayed within the modal.
 4. The modal is where backend actions – i.e. toggle bookmark status, add tags, remove tag – become operational.
 
 ## Setup
