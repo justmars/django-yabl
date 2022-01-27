@@ -26,20 +26,17 @@ pytest-instafail = "^0.4.2"
 pytest-sugar = "^0.9.4"
 pytest-icdiff = "^0.5"
 pytest-cov = "^2.12.1"
-mypy = "^0.902"
+mypy = "^0.930"
 black = "^21.12b0"
 isort = "^5.10.1"
-pre-commit = "^2.16.0"
-ipykernel = "^6.6.0"
+pre-commit = "^2.17.0"
+ipykernel = "^6.7.0"
 tqdm = "^4.62"
-PyYAML = "^6.0"
-
-
 
 [tool.pytest]
 DJANGO_SETTINGS_MODULE = "config.settings" # depends on project root
 minversion = "6.0"
-addopts = "--ds=config.settings"
+addopts = "-ra -q --cov"
 testpaths = ["tests"]
 
 [tool.isort]
