@@ -139,8 +139,7 @@ class SampleBook(AbstractBookmarkable)
     @property
     def modal(self) -> SafeText:
         """Return html with htmx modal launcher based on app_name. Presumes prior coordination with bookmarks.utils in urls.py"""
-        return format_html(
-            """<em hx-trigger="click"
+        raw = """<em hx-trigger="click"
                 hx-get="{url}"
                 hx-target="body"
                 hx-swap="beforeend"
@@ -148,20 +147,17 @@ class SampleBook(AbstractBookmarkable)
                 _="on mouseover add [@style=text-decoration:underline] to me
                     on mouseleave remove [@style=text-decoration:underline] from me
                 "
-                >view
-                    <span id="{loader_id}" class="throbber-loader htmx-indicator">Loading...</span>
-                </em>
-            """,
+                >view</em>
+                <span id="{loader_id}" class="spinner-border htmx-indicator" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </span>
+            """
+        return format_html(
+            raw,
             loader_id=f"spinner-{self.pk}",
             url=self.launch_modal_url,
         )
 ```
-
-## Ensure loader css / id
-
-1. See `hx-indicator="#{loader_id}"`
-2. See `class="throbber-loader htmx-indicator">Loading...</span>`
-3. See `loader_id=f"spinner-{self.pk}"`
 
 ## Add modal element, ensure authenticated
 

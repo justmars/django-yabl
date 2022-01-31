@@ -1,0 +1,16 @@
+<div class="form-check form-switch">
+    <input
+        hx-trigger="change"
+        hx-put="{{toggle_url}}"
+        hx-target="closest section"
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        {% if is_bookmarked %}
+            checked
+            hx-confirm="Delete tags associated with this bookmark?"
+        {% endif %}
+    >
+    Bookmark  <!-- toggle bookmark form -->
+    </input>
+</div>

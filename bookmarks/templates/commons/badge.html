@@ -1,0 +1,12 @@
+<div class="badge rounded-pill bg-dark bg-opacity-80 tagged-item">
+    <a href="{% url 'bookmarks:filtered_objs' tag.name %}" class="text-decoration-none text-white">{{tag.name}}</a>
+    <span
+        class="bi bi-x"
+        hx-trigger="click"
+        hx-confirm="Are you sure you want to delete tag: {{tag.name}}?"
+        hx-delete="{{del_tag_url}}?tag={{tag.name}}"
+        hx-swap="none"
+        _="on tagDeleted transition opacity to 0 then remove closest <div.tagged-item/>
+    "
+    ></span>
+</div>
