@@ -16,7 +16,6 @@ python = "^3.8"
 Django = "^4.0"
 django-extensions = "^3.1.5"
 django-debug-toolbar = "^3.2.2"
-django-allauth = "^0.47.0"
 
 [tool.poetry.dev-dependencies]
 djhtml = "^1.4.10"
