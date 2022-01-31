@@ -1,5 +1,17 @@
 # Configuration
 
+## Add to installed apps
+
+INSTALLED_APPS = [
+    "bookmarks", # new
+]
+
+## Add to urls.py
+
+urlpatterns = [
+    path("bookmarks/", include("bookmarks.urls")),
+]
+
 Let's assume an `examples` app containing a `SampleBook` model:
 
 ## Inherit from abstract base model
