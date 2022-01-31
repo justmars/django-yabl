@@ -2,7 +2,7 @@
 
 Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models.
 
-`AbstractBookmarkable` contains `bookmarks` field. This enables  arbitrary child models, e.g. Movies, Books, Laws, Clothes, etc., to inherit uniform properties for bookmarking and tagging.
+`AbstractBookmarkable` contains `bookmarks` field. This enables arbitrary child models, e.g. Movies, Books, Laws, Clothes, etc., to inherit uniform properties for bookmarking and tagging.
 
 The `bookmarks` field is mapped to a generic `Bookmark` model containing:
 
@@ -34,12 +34,25 @@ The abstraction makes each inheriting instance _bookmarkable_ and _taggable_ by 
 
 ## Modal-based UX
 
-1. The _app-level_ [base.html](bookmarks/templates/base.html) uses:
-   - the htmx/hyperscript example [modal.css](bookmarks/static/css/modal.css); and
-   - a bespoke [starter.css](bookmarks/static/css/starter.css)
-2. The _app-level_ [modal.html](bookmarks/templates/commons/modal.html) shows a modal via htmx click.
-3. The _app-level_ [panel.html](bookmarks/templates/tags/templates/tags/panel.html) shows content displayed within the modal.
-4. The modal is where backend actions – i.e. toggle bookmark status, add tags, remove tag – become operational.
+### What is the concept?
+
+The modal is where the user interacts – i.e. toggle bookmark status, add tags, remove tag (see table above) – with the data.
+
+### How is the modal styled?
+
+See the htmx/hyperscript example [modal.css](bookmarks/static/css/modal.css).
+
+### How is the modal constructed during run-time?
+
+See _app-level_ [modal.html](bookmarks/templates/commons/modal.html) which shows a modal via htmx click on the `@launch_modal_url` property.
+
+### What are the pre-made contents of the modal?
+
+The _app-level_ [panel.html](bookmarks/templates/tags/templates/tags/panel.html), contained within the modal, shows an actionable form for saving the bookmarable object and associating said object with tags:
+
+1. The submission of tags is POST'ed through the `add_tags_url`.
+2. The deletion of tags is DELETE'ed through the `del_tag_url`.
+3. The bookmark toggle is PUT'ed through the `toggle_status_url`.
 
 ## Setup
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-yabl"
-version = "0.0.1"
+version = "0.0.2"
 description = "Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models."
 authors = ["Marcelino G. Veloso III <mars@veloso.one>"]
 readme = "README.md"
@@ -27,13 +27,13 @@ pytest-sugar = "^0.9.4"
 pytest-icdiff = "^0.5"
 pytest-cov = "^2.12.1"
 mypy = "^0.930"
-black = "^21.12b0"
+black = "^22.1"
 isort = "^5.10.1"
 pre-commit = "^2.17.0"
 ipykernel = "^6.7.0"
 tqdm = "^4.62"
 
-[tool.pytest]
+[tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings" # depends on project root
 minversion = "6.0"
 addopts = "-ra -q --cov"

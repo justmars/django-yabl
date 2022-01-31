@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %} <title>Bookmarked | BrandX</title>  {% endblock title %}
+
+{% block content %}
+    <main class="container">
+        <center>
+            <h1>Your Bookmarks</h1>
+            {% if not user.is_authenticated %}
+                {% load account %}
+                <p><a href="{% url 'account_login' %}">Log in</a> to see saved objects you've tagged.</p>
+            {% endif %}
+        </center>
+        {% for obj in bookmarked_objs %}
+            {% if forloop.first %}
+                <div class="row text-muted">
+                    <div class="col">Object bookmarked</div>
+                    <div class="col">Type of Object</div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col">
+                    <span>{{obj.content_object}}</span>
+                    {% if user.is_authenticated %}
+                        {{obj.content_object.modal}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <span>{{obj.content_type.name}}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock content %}
