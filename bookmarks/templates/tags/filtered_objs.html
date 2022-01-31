@@ -3,38 +3,35 @@
 {% block title %} <title>Tagged | BrandX</title>  {% endblock title %}
 
 {% block content %}
-    <main>
-        <vstack spacing=s>
-            <center>
-                <h1>
-                    {% if model_type %}<mark>{{model_type.name}}</mark>{% endif %}
-                    tagged <mark>{{tag_slug}}</mark>
-                </h1>
-                {% if user.is_authenticated %}
-                    <p>You're logged in as {{user}}</p>
-                {% else %}
-                    {% load account %}
-                    <p><a href="{% url 'account_login' %}">Login</a> to view / add tags.</p>
-                {% endif %}
-            </center>
-
-            {% for obj in user_tagged_objs %}
-                {% if forloop.first %}
-                    <hstack spacing=m>
-                        <em>Object Tagged</em>
-                        <spacer></spacer>
-                        <em>Type of Object</em>
-                    </hstack>
-                {% endif %}
-                <hstack spacing=m>
+    <main class="container">
+        <center>
+            <h1>
+                {% if model_type %}<mark>{{model_type.name}}</mark>{% endif %}
+                tagged <mark>{{tag_slug}}</mark>
+            </h1>
+            {% if not user.is_authenticated %}
+                {% load account %}
+                <p><a href="{% url 'account_login' %}">Log in</a> to see saved objects you've tagged.</p>
+            {% endif %}
+        </center>
+        {% for obj in user_tagged_objs %}
+            {% if forloop.first %}
+                <div class="row text-muted">
+                    <div class="col">Object bookmarked</div>
+                    <div class="col">Type of Object</div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col">
                     <span>{{obj.content_object}}</span>
                     {% if user.is_authenticated %}
                         {{obj.content_object.modal}}
                     {% endif %}
-                    <spacer></spacer>
+                </div>
+                <div class="col">
                     <span>{{obj.content_type.name}}</span>
-                </hstack>
-            {% endfor %}
-        </vstack>
+                </div>
+            </div>
+        {% endfor %}
     </main>
 {% endblock content %}

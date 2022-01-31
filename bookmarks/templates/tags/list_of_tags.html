@@ -14,10 +14,12 @@
         <ul class="list-group">
             {% for tag in tags %}
                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <span>
-                        <a href="{% url 'bookmarks:filtered_objs' tag.name %}">{{tag.name}}</a>
-                    </span>
-                    {% include './tagged_models.html' %}
+                    <details>
+                        <summary>
+                            <a href="{% url 'bookmarks:filtered_objs' tag.name %}">{{tag.name}}</a>
+                        </summary>
+                        {% include './tagged_models.html' %}
+                    </details>
                 </li>
             {% empty %}
                 <h3> No tags supplied. </h3>

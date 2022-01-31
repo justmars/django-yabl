@@ -20,9 +20,9 @@ Placed here for easier access in configuration and tests)
 """
 
 MODAL_BASE = "commons/modal.html"
-PANEL = "tags/panel.html"
+PANEL = "commons/action_panel.html"
 LIST_BOOKMARKED = "bookmarks/bookmark_objs.html"
-LIST_TAGS = "tags/tags.html"
+LIST_TAGS = "tags/list_of_tags.html"
 LIST_FILTERED = "tags/filtered_objs.html"
 
 """

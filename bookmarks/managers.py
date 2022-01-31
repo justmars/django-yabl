@@ -3,7 +3,6 @@ from typing import Optional
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Count, Q, Value
-from django.db.models.expressions import Expression
 from django.db.models.query import QuerySet
 
 
@@ -21,7 +20,15 @@ class UserAnnotations(models.Manager):
         return qs
 
     def prep_for_annotation(self, user, model: models.Model):
-        """Generate values for `_count`, `_id`, and `_slug` prefixed with the model `label`, e.g if the model is `Decision`, the annotation keys are `decision_count`, `decision_id`, and `decision_slug`. The `_id` refers to the `contenttype` id, the `slug` refers to the lowercased name of the model."""
+        """Using the prefix of the model `label`, generate values for `_count`, `_id`, and `_slug`.
+
+        e.g if the model is `SampleBook`, the generated keys are `samplebook_count`, `samplebook_id`, and `samplebook_slug`.
+
+        1. The `_id` refers to the `contenttype` id.
+        2. The `_slug` refers to the lowercased name of the model.
+        3. The `_count` refers to the number of instances bookmarked per type.
+
+        See tags/tagged_models.html for how used."""
         label = model._meta.model_name.lower()
         type_of_model = ContentType.objects.get_for_model(model)
         by_type = Q(bookmarked__content_type=type_of_model)
@@ -43,7 +50,7 @@ class UserAnnotations(models.Manager):
 
 class MarkedTags(models.Manager):
     def _bookmarker_by_user(self, user):
-        """Each user may have bookmarked to objects which have an , this fetches all bookmarks made by a specific user."""
+        """Each user may have bookmarked objects. This fetches all bookmarks made by a specific user."""
         return (
             super()
             .get_queryset()
@@ -56,7 +63,7 @@ class MarkedTags(models.Manager):
     def extract_from(
         self, user, tag, content_id: Optional[int] = None
     ) -> QuerySet:
-        """bookmarks tagged by the `user` with a `tag_slug`. The resulting queryset can be of different models since the `bookmark` model is generic; but if `cat_id` is set, the instances must be of the same contenttype model represented by the `cat_id`."""
+        """bookmarks tagged by the `user` with a `tag_slug`. The resulting queryset can be of different models since the `bookmark` model is generic; but if `content_id` is set, the instances must be of the same contenttype model represented by the `content_id`."""
         qs = self._bookmarker_by_user(user).filter(tags=tag)
         if content_id:
             qs = qs.filter(
