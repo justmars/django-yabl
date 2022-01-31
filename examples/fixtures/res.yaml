@@ -1,0 +1,105 @@
+- model: auth.user
+  pk: 1
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: locke
+    first_name: Scott
+    last_name: Lynch
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.650528+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kal
+    first_name: Brandon
+    last_name: Sanderson
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.653526+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 3
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kvothe
+    first_name: Patrick
+    last_name: Rothfuss
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.654816+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 4
+  fields:
+    password: pbkdf2_sha256$320000$ZWtv8SH57Av3q6psy8adW9$I7K+6PD3RMzrRWHuqTCcVjupsLBv2kmbs+Gv8Eb+rTk=
+    last_login: 2022-01-31 08:01:04.915434+00:00
+    is_superuser: true
+    username: mv
+    first_name: ''
+    last_name: ''
+    email: testmarcelino@gmail.com
+    is_staff: true
+    is_active: true
+    date_joined: 2022-01-31 05:49:54.561028+00:00
+    groups: []
+    user_permissions: []
+- model: examples.samplebook
+  pk: 1
+  fields:
+    title: Gentleman Bastards
+    excerpt: Thief
+    author: 1
+- model: examples.samplebook
+  pk: 2
+  fields:
+    title: Stormlight Archives
+    excerpt: Soldier
+    author: 2
+- model: examples.samplebook
+  pk: 3
+  fields:
+    title: Kingkiller Chronicles
+    excerpt: Student
+    author: 3
+- model: examples.samplequote
+  pk: 8712fe1a-da46-4201-b960-3b32861a29c6
+  fields:
+    book: 3
+    quote: '"let us assume I am the center of creation. In doing this, let us pass
+      over innumerable boring stories: the rise and fall of empires, sagas of heroism,
+      ballads of tragic love. Let us hurry forward to the only tale of any real importance.”
+      His smile broadened. “Mine.”"'
+- model: examples.samplequote
+  pk: 9114572f-7934-4499-babb-4731ebfc4e3b
+  fields:
+    book: 1
+    quote: There’s no freedom quite like the freedom of being constantly underestimated,
+- model: examples.samplequote
+  pk: 961e6238-4655-42e8-9cff-9d3a174b2ec2
+  fields:
+    book: 3
+    quote: “I like to learn to use the local weapons,” Mraize said. “It is a quirk,
+      though I feel it is justified. If you want to understand a people, learn their
+      weapons. The way men kill one another says far more about a culture than any
+      scholar’s ethnography.”
+- model: examples.samplequote
+  pk: f56d36d5-f8a9-4bc5-a857-bc1b24c851a4
+  fields:
+    book: 1
+    quote: “Truthfully,” whispered Locke, “I have never desired a capa’s power, because
+      I would never want a capa’s problems.”

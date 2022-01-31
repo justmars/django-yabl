@@ -3,13 +3,13 @@
     {{object_content_for_panel}}
 
     {% for tag in user_tags %}
-        {% include './badge.html' %} <!-- allows delete of each tag -->
+        {% include './_badge.html' %} <!-- allows delete of each tag -->
     {% endfor %}
 
     {% if user_tags %} <!-- adds space -->
         <br><br>
     {% endif %}
 
-    {% include './toggle.html' %} <!-- targets entire section -->
-    {% include './tagform.html' %} <!-- targets entire section -->
+    {% include './_toggle.html' %} <!-- targets entire section -->
+    {% include './_tag_form.html' %} <!-- targets entire section -->
 </section>
