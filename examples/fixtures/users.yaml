@@ -1,0 +1,45 @@
+- model: auth.user
+  pk: 1
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: locke
+    first_name: Scott
+    last_name: Lynch
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.650528+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kal
+    first_name: Brandon
+    last_name: Sanderson
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.653526+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 3
+  fields:
+    password: abcd
+    last_login: null
+    is_superuser: false
+    username: kvothe
+    first_name: Patrick
+    last_name: Rothfuss
+    email: ""
+    is_staff: false
+    is_active: true
+    date_joined: 2021-12-11 14:07:04.654816+00:00
+    groups: []
+    user_permissions: []

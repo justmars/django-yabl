@@ -4,7 +4,7 @@ from .models import SampleBook, SampleQuote
 
 
 class SampleBookAdmin(admin.ModelAdmin):
-    fields = ["title", "excerpt"]
+    fields = ["title", "excerpt", "author"]
 
 
 admin.site.register(SampleBook, SampleBookAdmin)
