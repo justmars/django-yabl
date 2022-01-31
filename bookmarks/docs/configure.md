@@ -30,6 +30,9 @@ Each display will be different because each model will have different fields / d
 
 ```python
 # examples/models.py
+from django.utils.html import format_html # new
+from django.utils.safestring import SafeText # new
+
 class SampleBook(AbstractBookmarkable):
     ...
     @property
@@ -52,7 +55,14 @@ Use template of preconfigured set of views, matching the same to another model, 
 
 ```python
 # examples/views.py
-from bookmarks.utils import Pathmaker, MODAL_BASE, PANEL
+from django.template.response import TemplateResponse # new
+from django.shortcuts import get_object_or_404 # new
+from django.views.decorators.http import (
+    require_GET,
+    require_http_methods,
+    require_POST,
+) # new
+from bookmarks.utils import Pathmaker, MODAL_BASE, PANEL # new
 
 @login_required
 @require_GET

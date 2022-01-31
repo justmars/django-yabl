@@ -12,13 +12,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'bookmarks:annotated_tags' %}">Tags</a>
                 </li>
-                {% load account %}
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Signup</a></li>
-                {% endif %}
             </ul>
         </div>
     </div>
