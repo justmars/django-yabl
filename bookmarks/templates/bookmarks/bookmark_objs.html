@@ -11,6 +11,10 @@
             {% endif %}
         </center>
         {% for obj in bookmarked_objs %}
+            <div hx-trigger="load" hx-get="{{obj.content_object.get_item_url}}">
+                {% include '../commons/_panel.html' %}
+            </div>
+            <!--
             {% if forloop.first %}
                 <div class="row text-muted">
                     <div class="col">Object bookmarked</div>
@@ -28,6 +32,7 @@
                     <span>{{obj.content_type.name}}</span>
                 </div>
             </div>
+            -->
         {% endfor %}
     </main>
 {% endblock content %}

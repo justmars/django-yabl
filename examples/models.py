@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeText
 
@@ -24,6 +25,9 @@ class SampleBook(AbstractBookmarkable):
             f"{self.title} by {self.author.first_name} {self.author.last_name}"
         )
 
+    def get_absolute_url(self):
+        return reverse("examples:book_detail", kwargs={"pk": self.pk})
+
     @property
     def object_content_for_panel(self) -> SafeText:
         return format_html(
@@ -42,7 +46,9 @@ class SampleQuote(AbstractBookmarkable):
     """Used for testing only. See bookmarks/tests/conftest.py"""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    book = models.ForeignKey(SampleBook, on_delete=models.CASCADE)
+    book = models.ForeignKey(
+        SampleBook, on_delete=models.CASCADE, related_name="quotes"
+    )
     quote = models.TextField()
 
     class Meta:

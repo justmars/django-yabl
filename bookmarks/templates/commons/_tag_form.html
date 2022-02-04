@@ -1,22 +1,28 @@
-<form class="row">
-    <div class="col">
-        <input
-            name="tags"
-            class="form-control form-control-sm"
-            aria-label="Add your tags here..."
-            placeholder="Comma-separated tags."
-            aria-label="Add your tags here..."
-            onfocus=this.value=''
-        >
-    </div>
-    <div class="col-auto">
-        <button
-            type="submit"
-            class="btn btn-success btn-sm"
-            hx-post="{{add_tags_url}}"
-            hx-target="closest section"
-            hx-swap="outerHTML"
-        >Add <!-- add tags to a bookmarked model instance -->
-        </button>
-    </div>
-</form>
+{% if add_tags_url %}
+    <form>
+        <div class="row">
+            <div class="col">
+                <input
+                    name="tags"
+                    class="form-control form-control-sm"
+                    aria-label="Add your tags here..."
+                    placeholder="Comma-separated tags."
+                    aria-label="Add your tags here..."
+                    onfocus=this.value=''
+                >
+            </div>
+            <div class="col-auto">
+                <button
+                    type="submit"
+                    class="btn btn-success btn-sm bi bi-tags"
+                    hx-post="{{add_tags_url}}"
+                    hx-target="closest section"
+                    hx-swap="outerHTML"
+                >&nbsp;Add <!-- add tags to a bookmarked model instance -->
+                </button>
+            </div>
+        </div>
+    </form>
+{% else %}
+    <span class="placeholder col-6"></span>
+{% endif %}

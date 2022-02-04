@@ -17,7 +17,7 @@ from django.utils.text import slugify
 from django_extensions.db.models import TimeStampedModel
 
 from .managers import MarkedTags, UserAnnotations
-from .utils import ADD_TAGS, DEL_TAG, LAUNCH_MODAL, TOGGLE_STATUS
+from .utils import ADD_TAGS, DEL_TAG, GET_ITEM, LAUNCH_MODAL, TOGGLE_STATUS
 
 
 class TagItem(TimeStampedModel):
@@ -80,6 +80,10 @@ class AbstractBookmarkable(models.Model):
         return self.make_action_url(LAUNCH_MODAL)
 
     @cached_property
+    def get_item_url(self):
+        return self.make_action_url(GET_ITEM)
+
+    @cached_property
     def add_tags_url(self):
         return self.make_action_url(ADD_TAGS)
 
@@ -103,7 +107,7 @@ class AbstractBookmarkable(models.Model):
                     on mouseleave remove [@style=text-decoration:underline] from me
                 "
                 >view</em>
-                <span id="{loader_id}" class="spinner-border htmx-indicator" role="status">
+                <span id="{loader_id}" class="spinner-border spinner-border-sm htmx-indicator" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </span>
             """

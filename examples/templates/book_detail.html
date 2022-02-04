@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+<h1>{{book.title}}</h1>
+<p class="lead">Your Saved Quotes</p>
+<ul>
+{% for quote in quotes_saved %}
+<div hx-trigger="load" hx-get="{{quote.get_item_url}}">
+    {% include 'commons/_panel.html' %}
+</div>
+{% endfor %}
+</ul>
+</main>
+{% endblock content %}

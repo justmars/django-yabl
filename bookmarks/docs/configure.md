@@ -86,6 +86,13 @@ def launch_modal_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: 
 
 
 @login_required
+@require_GET
+def get_item_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
+    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
+    context = obj.set_bookmarked_context(request.user)
+    return TemplateResponse(request, PANEL, context)
+
+@login_required
 @require_http_methods(["PUT"])
 def toggle_status_samplebook(
     request: HttpRequest, pk: str
@@ -121,6 +128,7 @@ Each view function from app/`views.py` related to a particular model should be i
 BOOK = Pathmaker(
     model_klass=SampleBook, # change model to ArbitraryPainting
     launch_func=launch_modal_samplebook, # add changed view name
+    get_item_func=get_item_samplebook, # add changed view name
     toggle_status_func=toggle_status_samplebook, # add changed view name
     add_tags_func=add_tags_samplebook, # add changed view name
     del_tag_func=del_tag_samplebook, # add changed view name

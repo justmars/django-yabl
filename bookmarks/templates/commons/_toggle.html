@@ -1,16 +1,15 @@
-<div class="form-check form-switch">
-    <input
-        hx-trigger="change"
+{% if toggle_url %}
+    <span
+        class="fs-3 float-end bi bi-bookmark{% if is_bookmarked %}-fill{% endif %}"
         hx-put="{{toggle_url}}"
         hx-target="closest section"
-        class="form-check-input"
-        type="checkbox"
-        role="switch"
+        hx-swap="outerHTML"
         {% if is_bookmarked %}
-            checked
-            hx-confirm="Delete tags associated with this bookmark?"
+            _="on click trigger closeModal"
         {% endif %}
     >
-    Bookmark  <!-- toggle bookmark form -->
-    </input>
-</div>
+    </span><!-- if object is presently saved, if toggled for unsaving, close the modal -->
+{% else %}
+    <span class="fs-3 float-end bi bi-bookmark">
+    </span>
+{% endif %}

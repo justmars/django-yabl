@@ -27,6 +27,7 @@ The abstraction makes each inheriting instance _bookmarkable_ and _taggable_ by 
 | `set_bookmarked_context`(user)    | Combines relevant urls and attributes for template output  |
 | @`modal`                          | Custom modal enables: _toggle_, _add tags_, _remove tag_   |
 | @`launch_modal_url`               | URL to launch custom modal                                 |
+| @`get_item_url`               | URL to load the panel containde within custom modal                                 |
 | @`add_tags_url`                   | URL to POST tags added                                     |
 | @`del_tag_url`                    | URL to DELETE tag added                                    |
 | @`toggle_status_url`              | URL to toggle bookmark status of an object instance added  |

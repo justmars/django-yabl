@@ -1,3 +1,4 @@
+from ast import Call
 from dataclasses import dataclass
 from typing import Callable
 
@@ -12,6 +13,7 @@ ADD_TAGS = "add_tags"
 DEL_TAG = "del_tag"
 TOGGLE_STATUS = "toggle_status"
 LAUNCH_MODAL = "launch_modal"
+GET_ITEM = "get_item"
 
 
 """
@@ -20,7 +22,8 @@ Placed here for easier access in configuration and tests)
 """
 
 MODAL_BASE = "commons/modal.html"
-PANEL = "commons/action_panel.html"
+PANEL = "commons/_panel.html"
+ITEM = "commons/item.html"
 LIST_BOOKMARKED = "bookmarks/bookmark_objs.html"
 LIST_TAGS = "tags/list_of_tags.html"
 LIST_FILTERED = "tags/filtered_objs.html"
@@ -36,6 +39,7 @@ class Pathmaker:
 
     model_klass: Model
     launch_func: Callable
+    get_item_func: Callable
     add_tags_func: Callable
     del_tag_func: Callable
     toggle_status_func: Callable
@@ -44,6 +48,8 @@ class Pathmaker:
         return [  # fake implies we don't know the value of the arg yet
             self.uniform_act_path(LAUNCH_MODAL, self.launch_func, fake=True),
             self.uniform_act_path(LAUNCH_MODAL, self.launch_func),
+            self.uniform_act_path(GET_ITEM, self.get_item_func, fake=True),
+            self.uniform_act_path(GET_ITEM, self.get_item_func),
             self.uniform_act_path(ADD_TAGS, self.add_tags_func),
             self.uniform_act_path(DEL_TAG, self.del_tag_func),
             self.uniform_act_path(TOGGLE_STATUS, self.toggle_status_func),
