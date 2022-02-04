@@ -2,9 +2,13 @@
 <ul>
     {% for obj in obj_list %}
         <li>
-            <a href="{{obj.get_absolute_url}}">
-                {{obj}}
-            </a>
+            {% if user.is_authenticated %}
+                <a href="{{obj.get_absolute_url}}">
+                    {{obj}}
+                </a>
+            {% else %}
+                {{ obj }}
+            {% endif %}
             {% if user.is_authenticated %}
                 {{obj.modal}}
             {% endif %}

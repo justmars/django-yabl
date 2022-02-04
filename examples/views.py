@@ -1,4 +1,8 @@
+from typing import Optional
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -23,7 +27,7 @@ def homepage_view(request: HttpRequest):
     return TemplateResponse(request, "home.html", context)
 
 
-class SampleBookDetail(DetailView):
+class SampleBookDetail(LoginRequiredMixin, DetailView):
     model = SampleBook
     template_name = "book_detail.html"
     context_object_name = "book"
@@ -56,11 +60,18 @@ def launch_modal_samplebook(request: HttpRequest, pk: str) -> TemplateResponse:
     return TemplateResponse(request, MODAL_BASE, context)
 
 
-@login_required
 @require_GET
-def get_item_samplebook(request: HttpRequest, pk: str) -> TemplateResponse:
+def get_item_samplebook(
+    request: HttpRequest, pk: str, user_slug: Optional[str] = None
+) -> TemplateResponse:
     obj = get_object_or_404(SampleBook, pk=pk)
-    context = obj.set_bookmarked_context(request.user)
+    context = {}
+    if user_slug:
+        if user_found := get_object_or_404(get_user_model(), slug=user_slug):
+            context = obj.set_bookmarked_context(user_found)
+    else:
+        if request.user.is_authenticated:
+            context = obj.set_bookmarked_context(request.user)
     return TemplateResponse(request, PANEL, context)
 
 
@@ -120,11 +131,18 @@ def launch_modal_samplequote(
     return TemplateResponse(request, MODAL_BASE, context)
 
 
-@login_required
 @require_GET
-def get_item_samplequote(request: HttpRequest, pk: str) -> TemplateResponse:
+def get_item_samplequote(
+    request: HttpRequest, pk: str, user_slug: Optional[str] = None
+) -> TemplateResponse:
     obj = get_object_or_404(SampleQuote, pk=pk)
-    context = obj.set_bookmarked_context(request.user)
+    context = {}
+    if user_slug:
+        if user_found := get_object_or_404(get_user_model(), slug=user_slug):
+            context = obj.set_bookmarked_context(user_found)
+    else:
+        if request.user.is_authenticated:
+            context = obj.set_bookmarked_context(request.user)
     return TemplateResponse(request, PANEL, context)
 
 

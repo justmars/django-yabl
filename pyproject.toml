@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-yabl"
-version = "0.0.6"
+version = "0.0.7"
 description = "Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models."
 authors = ["Marcelino G. Veloso III <mars@veloso.one>"]
 readme = "README.md"

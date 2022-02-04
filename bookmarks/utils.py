@@ -45,18 +45,25 @@ class Pathmaker:
     toggle_status_func: Callable
 
     def make_patterns(self) -> list[URLPattern]:
-        return [  # fake implies we don't know the value of the arg yet
-            self.uniform_act_path(LAUNCH_MODAL, self.launch_func, fake=True),
-            self.uniform_act_path(LAUNCH_MODAL, self.launch_func),
-            self.uniform_act_path(GET_ITEM, self.get_item_func, fake=True),
+        return [
             self.uniform_act_path(GET_ITEM, self.get_item_func),
+            self.add_user(GET_ITEM, self.get_item_func),  # may contain a user
+            self.uniform_act_path(
+                LAUNCH_MODAL, self.launch_func, is_fake=True
+            ),  # value of arg unknown when declared, supplied during runtime
+            self.uniform_act_path(LAUNCH_MODAL, self.launch_func),
             self.uniform_act_path(ADD_TAGS, self.add_tags_func),
             self.uniform_act_path(DEL_TAG, self.del_tag_func),
             self.uniform_act_path(TOGGLE_STATUS, self.toggle_status_func),
         ]
 
+    def add_user(self, act: str, func: Callable):
+        model_name = self.model_klass._meta.model_name
+        route = f"{model_name}/{act}/<str:pk>/<slug:user_slug>"
+        return path(route=route, view=func, name=f"{act}_{model_name}")
+
     def uniform_act_path(
-        self, act: str, func: Callable, fake: bool = False
+        self, act: str, func: Callable, is_fake: bool = False
     ) -> URLPattern:
         """
         Given parameters for launching the modal with a view, produces the following path:
@@ -67,7 +74,7 @@ class Pathmaker:
         Note nuance addition: fake urls imply the need to make the url dynamic such as when a modal url will only be filled up with an identifier during runtime or when it's necessary to setup the base url before adding from the ORM.
         """
         model_name = self.model_klass._meta.model_name
-        route = f"{model_name}/{act}/"
-        if not fake:
-            route += "<str:pk>"
+        route = f"{model_name}/{act}"
+        if not is_fake:
+            route += "/<str:pk>"
         return path(route=route, view=func, name=f"{act}_{model_name}")
