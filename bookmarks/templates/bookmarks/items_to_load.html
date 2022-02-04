@@ -1,5 +1,5 @@
-{% for item in items_to_load %}    
-    <div hx-trigger="load" hx-get="{{item.get_item_url}}">
+{% for item in items_to_load %}
+    <div hx-trigger="load" hx-get="{{item.get_item_url}}/{{user_profile.username}}">
         {% include 'commons/_panel.html' %}
     </div>
 {% endfor %}

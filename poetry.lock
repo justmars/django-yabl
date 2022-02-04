@@ -210,7 +210,7 @@ Django = ">=2.2"
 
 [[package]]
 name = "djhtml"
-version = "1.4.11"
+version = "1.4.12"
 description = "Django/Jinja template indenter"
 category = "dev"
 optional = false
@@ -1106,7 +1106,7 @@ django-extensions = [
     {file = "django_extensions-3.1.5-py3-none-any.whl", hash = "sha256:9238b9e016bb0009d621e05cf56ea8ce5cce9b32e91ad2026996a7377ca28069"},
 ]
 djhtml = [
-    {file = "djhtml-1.4.11.tar.gz", hash = "sha256:1b0b3d7c4d7207ec729d4720b3b5aa632d220bbee8df2f711d17457a2ce1ebc9"},
+    {file = "djhtml-1.4.12.tar.gz", hash = "sha256:e43afa8be7a4a80959c171d50c615ae1ee8ae11e4ac8e8550240759e476d5f76"},
 ]
 entrypoints = [
     {file = "entrypoints-0.4-py3-none-any.whl", hash = "sha256:f174b5ff827504fd3cd97cc3f8649f3693f51538c7e4bdf3ef002c8429d42f9f"},

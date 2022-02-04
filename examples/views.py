@@ -68,7 +68,9 @@ def get_item_samplebook(
     obj = get_object_or_404(SampleBook, pk=pk)
     context = {}
     if user_slug:
-        if user_found := get_object_or_404(get_user_model(), slug=user_slug):
+        if user_found := get_object_or_404(
+            get_user_model(), username=user_slug
+        ):
             context = obj.set_bookmarked_context(user_found)
     else:
         if request.user.is_authenticated:
@@ -139,7 +141,9 @@ def get_item_samplequote(
     obj = get_object_or_404(SampleQuote, pk=pk)
     context = {}
     if user_slug:
-        if user_found := get_object_or_404(get_user_model(), slug=user_slug):
+        if user_found := get_object_or_404(
+            get_user_model(), username=user_slug
+        ):
             context = obj.set_bookmarked_context(user_found)
     else:
         if request.user.is_authenticated:
