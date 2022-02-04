@@ -1,0 +1,5 @@
+{% for item in items_to_load %}    
+    <div hx-trigger="load" hx-get="{{item.get_item_url}}">
+        {% include 'commons/_panel.html' %}
+    </div>
+{% endfor %}

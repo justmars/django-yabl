@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} <title>Home | BrandX</title> {% endblock title %}
+
+{% block content %}
+    <main class="container">
+        {% include './sub_list.html' with header='Books' obj_list=book_list  %}
+        {% include './sub_list.html' with header='Quotes' obj_list=quote_list  %}
+        {% include './sub_list.html' with header='Users' obj_list=user_list  %}
+    </main>
+{% endblock content %}

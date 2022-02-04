@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load bookmark_util %}
+    {% populate_bookmark_items user_profile.saved_quotes  %}
+{% endblock content %}

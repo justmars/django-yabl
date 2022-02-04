@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container">
+<h1>{{user_profile.username}}</h1>
+<p class="lead">Bookmarks</p>
+<ul>
+    <li><a href="{% url 'users:get_saved_books' user_profile.username %}">Books</a></li>
+    <li><a href="{% url 'users:get_saved_quotes' user_profile.username %}">Quotes</a></li>
+</ul>
+</main>
+{% endblock content %}

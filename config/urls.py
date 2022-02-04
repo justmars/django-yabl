@@ -21,5 +21,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),  # third-party library
     path("bookmarks/", include("bookmarks.urls")),
+    path("users/", include("users.urls")),
     path("", include("examples.urls")),  # just for purposes of demo
 ]

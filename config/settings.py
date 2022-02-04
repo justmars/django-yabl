@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "bookmarks",
     "examples",  # uses bookmarks and tags
+    "users",
 ]
 INTERNAL_IPS: list[str] = ["127.0.0.1"]  # required by debug_toolbar
 MIDDLEWARE = [
@@ -129,3 +130,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+AUTH_USER_MODEL = "users.User"

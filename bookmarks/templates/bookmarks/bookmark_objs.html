@@ -11,25 +11,6 @@
             <div hx-trigger="load" hx-get="{{obj.content_object.get_item_url}}">
                 {% include '../commons/_panel.html' %}
             </div>
-            <!--
-            {% if forloop.first %}
-                <div class="row text-muted">
-                    <div class="col">Object bookmarked</div>
-                    <div class="col">Type of Object</div>
-                </div>
-            {% endif %}
-            <div class="row">
-                <div class="col">
-                    <span>{{obj.content_object}}</span>
-                    {% if user.is_authenticated %}
-                        {{obj.content_object.modal}}
-                    {% endif %}
-                </div>
-                <div class="col">
-                    <span>{{obj.content_type.name}}</span>
-                </div>
-            </div>
-            -->
         {% endfor %}
     </main>
 {% endblock content %}

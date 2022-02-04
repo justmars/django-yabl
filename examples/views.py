@@ -23,6 +23,7 @@ def homepage_view(request: HttpRequest):
     context = {
         "book_list": SampleBook.objects.all(),
         "quote_list": SampleQuote.objects.all(),
+        "user_list": get_user_model().objects.all(),
     }
     return TemplateResponse(request, "home.html", context)
 
