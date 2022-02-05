@@ -1,4 +1,3 @@
-from ast import Call
 from dataclasses import dataclass
 from typing import Callable
 
@@ -18,12 +17,15 @@ GET_ITEM = "get_item"
 
 """
 TEMPLATES
-Placed here for easier access in configuration and tests)
+Placed here for easier access in configuration and tests
 """
 
 MODAL_BASE = "commons/modal.html"
+"""Skeleton template of the modal"""
+
 PANEL = "commons/_panel.html"
-ITEM = "commons/item.html"
+"""Content and action panel which will hold the tag form, tag list with delete badges, and the bookmarking toggle"""
+
 LIST_BOOKMARKED = "bookmarks/bookmark_objs.html"
 LIST_TAGS = "tags/list_of_tags.html"
 LIST_FILTERED = "tags/filtered_objs.html"
@@ -40,30 +42,30 @@ class Pathmaker:
     model_klass: Model
 
     def make_patterns(self) -> list[URLPattern]:
+        item = self.model_klass.get_item_func
+        launch = self.model_klass.launch_modal_func
         return [
-            self.uniform_act_path(GET_ITEM, self.model_klass.get_item_func),
-            self.add_user(
-                GET_ITEM, self.model_klass.get_item_func
-            ),  # may contain a user
-            self.uniform_act_path(
-                LAUNCH_MODAL, self.model_klass.launch_modal_func, is_fake=True
-            ),  # value of arg unknown when declared, supplied during runtime
-            self.uniform_act_path(
-                LAUNCH_MODAL, self.model_klass.launch_modal_func
-            ),
-            self.uniform_act_path(ADD_TAGS, self.model_klass.add_tags_func),
-            self.uniform_act_path(DEL_TAG, self.model_klass.del_tag_func),
-            self.uniform_act_path(
-                TOGGLE_STATUS, self.model_klass.toggle_status_func
-            ),
+            # get_item urls
+            self.make_path(GET_ITEM, item),
+            self.add_user(GET_ITEM, item),
+            # launch_modal urls; the value of arg unknown when declared, may be supplied during runtime
+            self.make_path(LAUNCH_MODAL, launch, is_fake=True),
+            self.make_path(LAUNCH_MODAL, launch),
+            # add tags url
+            self.make_path(ADD_TAGS, self.model_klass.add_tags_func),
+            # del tag url
+            self.make_path(DEL_TAG, self.model_klass.del_tag_func),
+            # toggle bookmark url
+            self.make_path(TOGGLE_STATUS, self.model_klass.toggle_status_func),
         ]
 
-    def add_user(self, act: str, func: Callable):
+    def add_user(self, act: str, func: Callable) -> URLPattern:
+        """Same as make_path() but with a special parameter in the route for possible user"""
         model_name = self.model_klass._meta.model_name
         route = f"{model_name}/{act}/<str:pk>/<slug:user_slug>"
         return path(route=route, view=func, name=f"{act}_{model_name}")
 
-    def uniform_act_path(
+    def make_path(
         self, act: str, func: Callable, is_fake: bool = False
     ) -> URLPattern:
         """
