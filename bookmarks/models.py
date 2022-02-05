@@ -29,7 +29,6 @@ from .utils import (
     MODAL_BASE,
     PANEL,
     TOGGLE_STATUS,
-    Pathmaker,
 )
 
 
@@ -44,7 +43,10 @@ class TagItem(TimeStampedModel):
         return self.name
 
     class Meta:
+        db_table = "tag_item"
         ordering = ["-created"]
+        verbose_name = "Tag Item"
+        verbose_name_plural = "Tag Items"
 
     @classmethod
     def set_context(cls, user, tag_slug: str, model_id: Optional[int] = None):
@@ -52,9 +54,9 @@ class TagItem(TimeStampedModel):
         context = {}
         if model_id:
             context["model_type"] = ContentType.objects.get_for_id(model_id)
-        tag = get_object_or_404(TagItem, name=tag_slug)
-        extract = Bookmark.objects_tagged.extract_from
-        context["user_tagged_objs"] = extract(user, tag, model_id)
+        context["user_tagged_objs"] = Bookmark.objects_tagged.extract_from(
+            user, get_object_or_404(TagItem, name=tag_slug), model_id
+        )
         return context
 
 
@@ -75,6 +77,12 @@ class Bookmark(TimeStampedModel):
     def __str__(self):
         return f"{self.bookmarker} saved {self.content_object}"
 
+    class Meta:
+        db_table = "bookmark"
+        ordering = ["created"]
+        verbose_name = "Bookmarked Object"
+        verbose_name_plural = "Bookmarked Objects"
+
 
 class AbstractBookmarkable(models.Model):
     bookmarks = GenericRelation(
@@ -83,6 +91,34 @@ class AbstractBookmarkable(models.Model):
 
     class Meta:
         abstract = True
+
+    @property
+    def modal(self) -> SafeText:
+        """Return html with htmx modal launcher based on app_name. Presumes prior coordination with bookmarks.utils in urls.py"""
+        raw = """<span
+                class="bi bi-chevron-right"
+                hx-trigger="click"
+                hx-get="{url}"
+                hx-target="body"
+                hx-swap="beforeend"
+                hx-indicator="#{loader_id}"
+                _="on mouseover add [@style=text-decoration:underline] to me
+                    on mouseleave remove [@style=text-decoration:underline] from me
+                "
+                ></span>
+                <span id="{loader_id}" class="spinner-border spinner-border-sm htmx-indicator" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </span>
+            """
+        return format_html(
+            raw, loader_id=f"spinner-{self.pk}", url=self.launch_modal_url
+        )
+
+    @property
+    def object_content_for_panel(self) -> SafeText:
+        """Displayed at the top of the tag PANEL."""
+        raw = "<h2>Must be overriden by {{model_name}}'s properties.</h2>"
+        return format_html(raw, model_name=self._meta.model_name)
 
     def make_action_url(self, act: str):
         """Helper function to help generate urlpattern routes for bookmarking and tagging"""
@@ -194,32 +230,6 @@ class AbstractBookmarkable(models.Model):
         obj.toggle_bookmark(request.user)
         context = obj.set_bookmarked_context(request.user)
         return TemplateResponse(request, PANEL, context)
-
-    @property
-    def modal(self) -> SafeText:
-        """Return html with htmx modal launcher based on app_name. Presumes prior coordination with bookmarks.utils in urls.py"""
-        raw = """<em hx-trigger="click"
-                hx-get="{url}"
-                hx-target="body"
-                hx-swap="beforeend"
-                hx-indicator="#{loader_id}"
-                _="on mouseover add [@style=text-decoration:underline] to me
-                    on mouseleave remove [@style=text-decoration:underline] from me
-                "
-                >view</em>
-                <span id="{loader_id}" class="spinner-border spinner-border-sm htmx-indicator" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </span>
-            """
-        return format_html(
-            raw, loader_id=f"spinner-{self.pk}", url=self.launch_modal_url
-        )
-
-    @property
-    def object_content_for_panel(self) -> SafeText:
-        """Displayed at the top of the tag PANEL."""
-        raw = "<h2>Must be overriden by {{model_name}}'s properties.</h2>"
-        return format_html(raw, model_name=self._meta.model_name)
 
     def set_bookmarked_context(self, user) -> dict:
         """The tag PANEL in bookmarks/utils.py requires the use of certain variables that will not change, e.g. `is_bookmarked`, `toggle_url`. The values that fill these constants however will change based on the object instance `obj` and the `user` that is passed to this method."""

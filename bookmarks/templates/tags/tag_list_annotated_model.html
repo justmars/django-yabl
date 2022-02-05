@@ -1,0 +1,8 @@
+{% if count %}
+    {% url "bookmarks:filter_objects_by_tag_models" tag.name idx as model_tag_url %}
+    <span class="badge rounded-pill bg-secondary fs-6">
+        <a class="text-decoration-none text-white" href="{{model_tag_url}}">
+            {{slug}}
+        </a>: {{count}}
+    </span>
+{% endif %}

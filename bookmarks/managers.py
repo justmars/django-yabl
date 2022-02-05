@@ -28,7 +28,7 @@ class UserAnnotations(models.Manager):
         2. The `_slug` refers to the lowercased name of the model.
         3. The `_count` refers to the number of instances bookmarked per type.
 
-        See tags/tagged_models.html for how used."""
+        See tags/tag_list_annotated_models.html for how used."""
         label = model._meta.model_name.lower()
         type_of_model = ContentType.objects.get_for_model(model)
         by_type = Q(bookmarked__content_type=type_of_model)

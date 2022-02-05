@@ -49,7 +49,7 @@ def test_view_filtered_list(
     client, potential_bookmarker, item_with_tags, model_id
 ):
     kwargs = {"tag_slug": "omega", "model_id": model_id}
-    url = reverse("bookmarks:filtered_objs", kwargs=kwargs)
+    url = reverse("bookmarks:filter_objects_by_tag_models", kwargs=kwargs)
     client.force_login(potential_bookmarker)
     response = client.get(url)
     assert "user_tagged_objs" in response.context_data

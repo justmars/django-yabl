@@ -7,7 +7,7 @@ from .models import TagItem
 from .utils import LIST_BOOKMARKED, LIST_FILTERED, LIST_TAGS
 
 
-def filtered_objs(
+def filter_objects_by_tag_model(
     request: HttpRequest, tag_slug: str, model_id: Optional[int] = None
 ) -> TemplateResponse:
     """Get objects tagged with `tag_slug`, optionally filtered by `model_id`, assuming user is authenticated."""

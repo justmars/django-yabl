@@ -25,7 +25,7 @@ def test_bookmarked_qs_with_model_id(
 
 
 @pytest.mark.django_db
-def test_filtered_objs(potential_bookmarker, item_with_tags):
+def test_filter_objects_by_tag_models(potential_bookmarker, item_with_tags):
     context = TagItem.set_context(potential_bookmarker, "omega")
     assert isinstance(context, dict)
     assert "user_tagged_objs" in context
@@ -34,7 +34,7 @@ def test_filtered_objs(potential_bookmarker, item_with_tags):
 
 
 @pytest.mark.django_db
-def test_filtered_objs_filtered_by_model_id(
+def test_filter_objects_by_tag_models_filtered_by_model_id(
     potential_bookmarker, item_with_tags, model_id
 ):
     context = TagItem.set_context(potential_bookmarker, "omega", model_id)

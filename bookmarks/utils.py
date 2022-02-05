@@ -26,9 +26,14 @@ MODAL_BASE = "commons/modal.html"
 PANEL = "commons/_panel.html"
 """Content and action panel which will hold the tag form, tag list with delete badges, and the bookmarking toggle"""
 
-LIST_BOOKMARKED = "bookmarks/bookmark_objs.html"
-LIST_TAGS = "tags/list_of_tags.html"
-LIST_FILTERED = "tags/filtered_objs.html"
+LIST_BOOKMARKED = "bookmarks/bookmark_list.html"
+"""Contains a list of all bookmarked objects"""
+
+LIST_TAGS = "tags/tag_list.html"
+"""Contains a list of all tags used in bookmarked objects"""
+
+LIST_FILTERED = "tags/filter_objects_by_tag_model.html"
+"""Lists down bookmarked objects of the user filtered through their tags"""
 
 """
 URLS
@@ -42,15 +47,15 @@ class Pathmaker:
     model_klass: Model
 
     def make_patterns(self) -> list[URLPattern]:
-        item = self.model_klass.get_item_func
-        launch = self.model_klass.launch_modal_func
         return [
             # get_item urls
-            self.make_path(GET_ITEM, item),
-            self.add_user(GET_ITEM, item),
+            self.make_path(GET_ITEM, self.model_klass.get_item_func),
+            self.add_user(GET_ITEM, self.model_klass.get_item_func),
             # launch_modal urls; the value of arg unknown when declared, may be supplied during runtime
-            self.make_path(LAUNCH_MODAL, launch, is_fake=True),
-            self.make_path(LAUNCH_MODAL, launch),
+            self.make_path(
+                LAUNCH_MODAL, self.model_klass.launch_modal_func, is_fake=True
+            ),
+            self.make_path(LAUNCH_MODAL, self.model_klass.launch_modal_func),
             # add tags url
             self.make_path(ADD_TAGS, self.model_klass.add_tags_func),
             # del tag url
@@ -62,8 +67,9 @@ class Pathmaker:
     def add_user(self, act: str, func: Callable) -> URLPattern:
         """Same as make_path() but with a special parameter in the route for possible user"""
         model_name = self.model_klass._meta.model_name
+        path_name = f"{act}_{model_name}"
         route = f"{model_name}/{act}/<str:pk>/<slug:user_slug>"
-        return path(route=route, view=func, name=f"{act}_{model_name}")
+        return path(route=route, view=func, name=path_name)
 
     def make_path(
         self, act: str, func: Callable, is_fake: bool = False

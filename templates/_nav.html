@@ -1,13 +1,16 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">BrandX</a>
+        <a class="navbar-brand" href="/">Bookmarker / Tagger</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        {% if not user.is_authenticated %}
+            <span class="bg-warning text-dark">Test app requires login via <a href="/admin">admin.</a></span>
+        {% endif %}
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'bookmarks:bookmarked_objs' %}">Saved</a>
+                    <a class="nav-link" href="{% url 'bookmarks:bookmarked_objs' %}">Bookmarks</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'bookmarks:annotated_tags' %}">Tags</a>

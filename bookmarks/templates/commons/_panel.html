@@ -2,7 +2,8 @@
 <section class="my-3">
     <div class="card">
         <div class="card-body">
-            {% include './_toggle.html' %} <!-- targets entire section -->
+            {% include './_toggle_bookmark_status.html' %} <!-- targets entire section -->
+            {% include './_toggle_form.html' %}
             {% if object_content_for_panel %}
                 {{object_content_for_panel}} <!-- must be set as a model property to be used in set_bookmarked_context() -->
             {% else %}

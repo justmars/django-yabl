@@ -1,5 +1,5 @@
 <div class="badge rounded-pill bg-dark bg-opacity-80 tagged-item">
-    <a href="{% url 'bookmarks:filtered_objs' tag.name %}" class="text-decoration-none text-white">{{tag.name}}</a>
+    <a href="{% url 'bookmarks:filter_objects_by_tag_models' tag.name %}" class="text-decoration-none text-white">{{tag.name}}</a>
     <span
         class="bi bi-x"
         hx-trigger="click"

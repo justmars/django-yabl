@@ -4,9 +4,7 @@
 
 {% block content %}
     <main class="container">
-        <center>
-            <h1>Your Bookmarks</h1>
-        </center>
+        <h1 class="my-3">Your Bookmarks</h1>
         {% for obj in bookmarked_objs %}
             <div hx-trigger="load" hx-get="{{obj.content_object.get_item_url}}">
                 {% include '../commons/_panel.html' %}

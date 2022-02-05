@@ -157,10 +157,10 @@ If desired to place the `@modal` in a list view, consider the following example:
 
 ## Annotated tags customization
 
-Look for `bookmark/tags/tagged_models.html` and copy its contents to `templates/tags/tagged_models.html` to override the models used:
+Look for `bookmark/tags/tag_list_annotated_models.html` and copy its contents to `templates/tags/tag_list_annotated_models.html` to override the models used:
 
 ```jinja
-<!-- templates/tags/tagged_models.html -->
+<!-- templates/tags/tag_list_annotated_models.html -->
 {% include './annotated_item.html' with count=tag.samplebook_count slug=tag.samplebook_slug idx=tag.samplebook_id %}
 {% include './annotated_item.html' with count=tag.samplequote_count slug=tag.samplequote_slug idx=tag.samplequote_id %}
 <!-- Do this for each model that you want to show a count of tags for -->
@@ -172,7 +172,7 @@ The `annotated_tags()` view gets implementing classes of `AbstractBookmarkable` 
 
 Still exploring best way to display this annotated list of tags in the template.
 
-For now, override the `tags/tagged_models.html` template, replacing `samplebook` and `samplequote`, the _verbose model names_ of the implementing classes, with your selected models.
+For now, override the `tags/tag_list_annotated_models.html` template, replacing `samplebook` and `samplequote`, the _verbose model names_ of the implementing classes, with your selected models.
 
 ## Overrides styles
 
