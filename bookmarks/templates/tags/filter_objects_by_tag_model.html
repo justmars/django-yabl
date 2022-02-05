@@ -4,12 +4,12 @@
 
 {% block content %}
     <main class="container">
-        
+
         <h1 class="my-3">
             {% if model_type %}<mark>{{model_type.name}}</mark>{% endif %}
             tagged <mark>{{tag_slug}}</mark>
         </h1>
-        
+
         {% for obj in user_tagged_objs %}
             {% if forloop.first %}
                 <div class="row text-muted fs-3 my-2">

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %} <title>Home | BrandX</title> {% endblock title %}
+{% block title %} <title>Home | YABL</title> {% endblock title %}
 
 {% block content %}
     <main class="container">
+        <h1 class=" my-3">Yet another bookmarking library</h1>
+        <p class="lead">A test library for abstract model bookmarks which can be tagged.</p>
         {% include './sub_list.html' with header='Books' obj_list=book_list  %}
         {% include './sub_list.html' with header='Quotes' obj_list=quote_list  %}
         {% include './sub_list.html' with header='Users' obj_list=user_list  %}

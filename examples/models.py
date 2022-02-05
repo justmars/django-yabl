@@ -10,7 +10,7 @@ from bookmarks.models import AbstractBookmarkable
 
 
 class SampleBook(AbstractBookmarkable):
-    """Used for testing only. See bookmarks/tests/conftest.py"""
+    """Used for testing only. See tests/bookmarks/conftest.py"""
 
     title = models.CharField(max_length=50)
     excerpt = models.TextField(null=True)
@@ -43,7 +43,7 @@ class SampleBook(AbstractBookmarkable):
 
 
 class SampleQuote(AbstractBookmarkable):
-    """Used for testing only. See bookmarks/tests/conftest.py"""
+    """Used for testing only. See tests/bookmarks/conftest.py"""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     book = models.ForeignKey(
