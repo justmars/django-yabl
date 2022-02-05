@@ -48,7 +48,7 @@ from django.utils.safestring import SafeText # new
 class SampleBook(AbstractBookmarkable):
     ...
     @property
-    def object_content_for_panel(self) -> SafeText: # customizes appearance of a specific book within the custom modal
+    def object_content_for_panel(self) -> SafeText: # customizes appearance of a specific book when appearing via (a) the launch_modal_func or (b) the get_item_func
         return format_html(
             """
             <h2>{title}</h2>
@@ -61,84 +61,15 @@ class SampleBook(AbstractBookmarkable):
         )
 ```
 
-## Copy/paste view functions
-
-Use template of preconfigured set of views, matching the same to another model, e.g. `ArbitraryPainting`.
-
-```python
-# examples/views.py
-from django.template.response import TemplateResponse # new
-from django.shortcuts import get_object_or_404 # new
-from django.views.decorators.http import (
-    require_GET,
-    require_http_methods,
-    require_POST,
-) # new
-from bookmarks.utils import Pathmaker
-from bookmarks.views import (
-    generic_add_tags,
-    generic_del_tag,
-    generic_get_item,
-    generic_launch_modal,
-    generic_toggle_status,
-) # new
-
-
-@login_required
-@require_GET
-def launch_modal_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
-    return generic_launch_modal(SampleBook, request, pk) # change model to ArbitraryPainting
-
-
-@require_GET
-def get_item_samplebook(
-    request: HttpRequest, pk: str, user_slug: Optional[str] = None
-) -> TemplateResponse: # change view name
-    return generic_get_item(SampleBook, request, pk, user_slug) # change model to ArbitraryPainting
-
-
-@login_required
-@require_http_methods(["PUT"])
-def toggle_status_samplebook(
-    request: HttpRequest, pk: str
-) -> TemplateResponse: # change view name
-    return generic_toggle_status(SampleBook, request, pk) # change model to ArbitraryPainting
-
-
-@login_required
-@require_POST
-def add_tags_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
-    return generic_add_tags(SampleBook, request, pk) # change model to ArbitraryPainting
-
-
-@login_required
-@require_http_methods(["DELETE"])
-def del_tag_samplebook(request: HttpRequest, pk: str) -> HttpResponse: # change view name
-    return generic_del_tag(SampleBook, request, pk) # change model to ArbitraryPainting
-
-"""
-Each view function from app/`views.py` related to a particular model should be imported into app/`urls.py`. The views can be consolidated to a single pattern based on a `Pathmaker` helper dataclass defined in bookmark/utils.py.
-"""
-BOOK = Pathmaker(
-    model_klass=SampleBook, # change model to ArbitraryPainting
-    launch_func=launch_modal_samplebook, # add changed view name
-    get_item_func=get_item_samplebook, # add changed view name
-    toggle_status_func=toggle_status_samplebook, # add changed view name
-    add_tags_func=add_tags_samplebook, # add changed view name
-    del_tag_func=del_tag_samplebook, # add changed view name
-)
-```
-
-The copy/pasting isn't the most elegant solution but it provides better understanding of the data flow.
-
 ## Set URLs
 
 ```python
 # examples/urls.py
-from .views import SAMPLEBOOK
+from .models import SampleBook
+from bookmarks.utils import Pathmaker
 from .apps import ExamplesConfig
 app_name = ExamplesConfig.name # will match SampleBook.objects.get(pk=1)._meta.app_label
-urlpatterns = SAMPLEBOOK.make_patterns() + [..., ] # add helper method to the original list
+urlpatterns = Pathmaker(SampleBook).make_patterns() + [..., ] # add helper method to the original list
 ```
 
 The reason for the matching requirement is that `django.urls.reverse()` functions will rely on this convention to call urls from the object instance with a pre-determined property value, e.g.:
@@ -154,7 +85,7 @@ The reason for the matching requirement is that `django.urls.reverse()` function
 
 ## Configure modal
 
-One of the paths created in `make_patterns()` is the `launch_modal` path which can be customized by the model's `@modal` property.
+One of the paths created in `make_patterns()` is the `launch_modal` path which can be customized by the model's `@modal` property; or the same template can be modified to be more customized as long as url is set.
 
 ```python
 class SampleBook(AbstractBookmarkable)

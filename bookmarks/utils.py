@@ -38,23 +38,24 @@ class Pathmaker:
     """Auto-generate patterns with the convention `{act}_{model_klass._meta.model_name}` from view functions with respect to: (a) launching a modal inspecting a specific `obj` instance of a `model_klass`  (b) adding / deleting tags within the panel with respect to such `obj` instance; and (c) bookmarking / unbookmarking the `obj`."""
 
     model_klass: Model
-    launch_func: Callable
-    get_item_func: Callable
-    add_tags_func: Callable
-    del_tag_func: Callable
-    toggle_status_func: Callable
 
     def make_patterns(self) -> list[URLPattern]:
         return [
-            self.uniform_act_path(GET_ITEM, self.get_item_func),
-            self.add_user(GET_ITEM, self.get_item_func),  # may contain a user
+            self.uniform_act_path(GET_ITEM, self.model_klass.get_item_func),
+            self.add_user(
+                GET_ITEM, self.model_klass.get_item_func
+            ),  # may contain a user
             self.uniform_act_path(
-                LAUNCH_MODAL, self.launch_func, is_fake=True
+                LAUNCH_MODAL, self.model_klass.launch_modal_func, is_fake=True
             ),  # value of arg unknown when declared, supplied during runtime
-            self.uniform_act_path(LAUNCH_MODAL, self.launch_func),
-            self.uniform_act_path(ADD_TAGS, self.add_tags_func),
-            self.uniform_act_path(DEL_TAG, self.del_tag_func),
-            self.uniform_act_path(TOGGLE_STATUS, self.toggle_status_func),
+            self.uniform_act_path(
+                LAUNCH_MODAL, self.model_klass.launch_modal_func
+            ),
+            self.uniform_act_path(ADD_TAGS, self.model_klass.add_tags_func),
+            self.uniform_act_path(DEL_TAG, self.model_klass.del_tag_func),
+            self.uniform_act_path(
+                TOGGLE_STATUS, self.model_klass.toggle_status_func
+            ),
         ]
 
     def add_user(self, act: str, func: Callable):

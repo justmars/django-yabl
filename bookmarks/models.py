@@ -1,14 +1,18 @@
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation,
 )
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import BadRequest
 from django.db import models
 from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
@@ -17,7 +21,19 @@ from django.utils.text import slugify
 from django_extensions.db.models import TimeStampedModel
 
 from .managers import MarkedTags, UserAnnotations
-from .utils import ADD_TAGS, DEL_TAG, GET_ITEM, LAUNCH_MODAL, TOGGLE_STATUS
+from .utils import (
+    ADD_TAGS,
+    DEL_TAG,
+    GET_ITEM,
+    LAUNCH_MODAL,
+    LIST_BOOKMARKED,
+    LIST_FILTERED,
+    LIST_TAGS,
+    MODAL_BASE,
+    PANEL,
+    TOGGLE_STATUS,
+    Pathmaker,
+)
 
 
 class TagItem(TimeStampedModel):
@@ -193,3 +209,84 @@ class AbstractBookmarkable(models.Model):
         bookmark = self.bookmarks.get(bookmarker=user)
         if bookmark.tags.filter(name=slug).exists():
             bookmark.tags.remove(tag_to_remove)
+
+    @classmethod
+    def launch_modal_func(
+        cls, request: HttpRequest, pk: str
+    ) -> TemplateResponse:
+        """Launches the modal containing tagging and bookmarking functions"""
+        if not request.method == "GET":
+            raise BadRequest
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(settings.LOGIN_URL)
+
+        obj = get_object_or_404(cls, pk=pk)
+        panel = {"content_template": PANEL}
+        context = obj.set_bookmarked_context(request.user) | panel
+        return TemplateResponse(request, MODAL_BASE, context)
+
+    @classmethod
+    def get_item_func(
+        cls,
+        request: HttpRequest,
+        pk: str,
+        user_slug: Optional[str] = None,
+    ):
+        """Launches the object containing tagging and bookmarking functions"""
+        if not request.method == "GET":
+            raise BadRequest
+
+        obj = get_object_or_404(cls, pk=pk)
+        context = {}
+        if user_slug:
+            if user_found := get_object_or_404(
+                get_user_model(), username=user_slug
+            ):
+                context = obj.set_bookmarked_context(user_found)
+        else:
+            if request.user.is_authenticated:
+                context = obj.set_bookmarked_context(request.user)
+        return TemplateResponse(request, PANEL, context)
+
+    @classmethod
+    def toggle_status_func(
+        cls, request: HttpRequest, pk: str
+    ) -> TemplateResponse:
+        """Toggles the requesting user's preference re: bookmarked status of the object"""
+        if not request.method == "PUT":
+            return HttpResponseRedirect(settings.LOGIN_URL)
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(settings.LOGIN_URL)
+
+        obj = get_object_or_404(cls, pk=pk)
+        obj.toggle_bookmark(request.user)
+        context = obj.set_bookmarked_context(request.user)
+        return TemplateResponse(request, PANEL, context)
+
+    @classmethod
+    def add_tags_func(cls, request: HttpRequest, pk: str) -> TemplateResponse:
+        """Auto-bookmarks and tags the object with the submitted POST input form"""
+        if not request.method == "POST":
+            raise BadRequest
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(settings.LOGIN_URL)
+
+        obj = get_object_or_404(cls, pk=pk)
+        if submitted := request.POST.get("tags"):
+            if add_these := submitted.split(","):
+                obj.add_tags(request.user, add_these)
+        context = obj.set_bookmarked_context(request.user)
+        return TemplateResponse(request, PANEL, context)
+
+    @classmethod
+    def del_tag_func(cls, request: HttpRequest, pk: str) -> HttpResponse:
+        """Deletes a previously added user-made tag of a specific object"""
+        if not request.method == "DELETE":
+            raise BadRequest
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(settings.LOGIN_URL)
+
+        obj = get_object_or_404(cls, pk=pk)
+        if delete_this := request.POST.get("tag"):
+            obj.remove_tag(request.user, delete_this)
+        return HttpResponse(headers={"HX-Trigger": "tagDeleted"})
