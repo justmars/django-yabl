@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.http import (
     require_GET,
@@ -14,7 +13,14 @@ from django.views.decorators.http import (
 )
 from django.views.generic import DetailView
 
-from bookmarks.utils import ITEM, MODAL_BASE, PANEL, Pathmaker
+from bookmarks.utils import Pathmaker
+from bookmarks.views import (
+    generic_add_tags,
+    generic_del_tag,
+    generic_get_item,
+    generic_launch_modal,
+    generic_toggle_status,
+)
 
 from .models import SampleBook, SampleQuote
 
@@ -55,27 +61,14 @@ class SampleBookDetail(LoginRequiredMixin, DetailView):
 @login_required
 @require_GET
 def launch_modal_samplebook(request: HttpRequest, pk: str) -> TemplateResponse:
-    obj = get_object_or_404(SampleBook, pk=pk)
-    panel = {"content_template": PANEL}
-    context = obj.set_bookmarked_context(request.user) | panel
-    return TemplateResponse(request, MODAL_BASE, context)
+    return generic_launch_modal(SampleBook, request, pk)
 
 
 @require_GET
 def get_item_samplebook(
     request: HttpRequest, pk: str, user_slug: Optional[str] = None
 ) -> TemplateResponse:
-    obj = get_object_or_404(SampleBook, pk=pk)
-    context = {}
-    if user_slug:
-        if user_found := get_object_or_404(
-            get_user_model(), username=user_slug
-        ):
-            context = obj.set_bookmarked_context(user_found)
-    else:
-        if request.user.is_authenticated:
-            context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_get_item(SampleBook, request, pk, user_slug)
 
 
 @login_required
@@ -83,30 +76,19 @@ def get_item_samplebook(
 def toggle_status_samplebook(
     request: HttpRequest, pk: str
 ) -> TemplateResponse:
-    obj = get_object_or_404(SampleBook, pk=pk)
-    obj.toggle_bookmark(request.user)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_toggle_status(SampleBook, request, pk)
 
 
 @login_required
 @require_POST
 def add_tags_samplebook(request: HttpRequest, pk: str) -> TemplateResponse:
-    obj = get_object_or_404(SampleBook, pk=pk)
-    if submitted := request.POST.get("tags"):
-        if add_these := submitted.split(","):
-            obj.add_tags(request.user, add_these)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_add_tags(SampleBook, request, pk)
 
 
 @login_required
 @require_http_methods(["DELETE"])
 def del_tag_samplebook(request: HttpRequest, pk: str) -> HttpResponse:
-    obj = get_object_or_404(SampleBook, pk=pk)
-    if delete_this := request.POST.get("tag"):
-        obj.remove_tag(request.user, delete_this)
-    return HttpResponse(headers={"HX-Trigger": "tagDeleted"})
+    return generic_del_tag(SampleBook, request, pk)
 
 
 BOOK = Pathmaker(
@@ -128,27 +110,14 @@ BOOK = Pathmaker(
 def launch_modal_samplequote(
     request: HttpRequest, pk: str
 ) -> TemplateResponse:
-    obj = get_object_or_404(SampleQuote, pk=pk)
-    panel = {"content_template": PANEL}
-    context = obj.set_bookmarked_context(request.user) | panel
-    return TemplateResponse(request, MODAL_BASE, context)
+    return generic_launch_modal(SampleQuote, request, pk)
 
 
 @require_GET
 def get_item_samplequote(
     request: HttpRequest, pk: str, user_slug: Optional[str] = None
 ) -> TemplateResponse:
-    obj = get_object_or_404(SampleQuote, pk=pk)
-    context = {}
-    if user_slug:
-        if user_found := get_object_or_404(
-            get_user_model(), username=user_slug
-        ):
-            context = obj.set_bookmarked_context(user_found)
-    else:
-        if request.user.is_authenticated:
-            context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_get_item(SampleQuote, request, pk, user_slug)
 
 
 @login_required
@@ -156,30 +125,19 @@ def get_item_samplequote(
 def toggle_status_samplequote(
     request: HttpRequest, pk: str
 ) -> TemplateResponse:
-    obj = get_object_or_404(SampleQuote, pk=pk)
-    obj.toggle_bookmark(request.user)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_toggle_status(SampleQuote, request, pk)
 
 
 @login_required
 @require_POST
 def add_tags_samplequote(request: HttpRequest, pk: str) -> TemplateResponse:
-    obj = get_object_or_404(SampleQuote, pk=pk)
-    if submitted := request.POST.get("tags"):
-        if add_these := submitted.split(","):
-            obj.add_tags(request.user, add_these)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_add_tags(SampleQuote, request, pk)
 
 
 @login_required
 @require_http_methods(["DELETE"])
 def del_tag_samplequote(request: HttpRequest, pk: str) -> HttpResponse:
-    obj = get_object_or_404(SampleQuote, pk=pk)
-    if delete_this := request.POST.get("tag"):
-        obj.remove_tag(request.user, delete_this)
-    return HttpResponse(headers={"HX-Trigger": "tagDeleted"})
+    return generic_del_tag(SampleQuote, request, pk)
 
 
 QUOTE = Pathmaker(

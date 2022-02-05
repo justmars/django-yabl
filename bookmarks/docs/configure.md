@@ -74,53 +74,47 @@ from django.views.decorators.http import (
     require_http_methods,
     require_POST,
 ) # new
-from bookmarks.utils import Pathmaker, MODAL_BASE, PANEL # new
+from bookmarks.utils import Pathmaker
+from bookmarks.views import (
+    generic_add_tags,
+    generic_del_tag,
+    generic_get_item,
+    generic_launch_modal,
+    generic_toggle_status,
+) # new
+
 
 @login_required
 @require_GET
 def launch_modal_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
-    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
-    panel = {"content_template": PANEL}
-    context = obj.set_bookmarked_context(request.user) | panel
-    return TemplateResponse(request, MODAL_BASE, context)
+    return generic_launch_modal(SampleBook, request, pk) # change model to ArbitraryPainting
 
 
-@login_required
 @require_GET
-def get_item_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
-    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+def get_item_samplebook(
+    request: HttpRequest, pk: str, user_slug: Optional[str] = None
+) -> TemplateResponse: # change view name
+    return generic_get_item(SampleBook, request, pk, user_slug) # change model to ArbitraryPainting
+
 
 @login_required
 @require_http_methods(["PUT"])
 def toggle_status_samplebook(
     request: HttpRequest, pk: str
 ) -> TemplateResponse: # change view name
-    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
-    obj.toggle_bookmark(request.user)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_toggle_status(SampleBook, request, pk) # change model to ArbitraryPainting
 
 
 @login_required
 @require_POST
 def add_tags_samplebook(request: HttpRequest, pk: str) -> TemplateResponse: # change view name
-    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
-    if submitted := request.POST.get("tags"):
-        if add_these := submitted.split(","):
-            obj.add_tags(request.user, add_these)
-    context = obj.set_bookmarked_context(request.user)
-    return TemplateResponse(request, PANEL, context)
+    return generic_add_tags(SampleBook, request, pk) # change model to ArbitraryPainting
 
 
 @login_required
 @require_http_methods(["DELETE"])
 def del_tag_samplebook(request: HttpRequest, pk: str) -> HttpResponse: # change view name
-    obj = get_object_or_404(SampleBook, pk=pk) # change model to ArbitraryPainting
-    if delete_this := request.POST.get("tag"):
-        obj.remove_tag(request.user, delete_this)
-    return HttpResponse(headers={"HX-Trigger": "tagDeleted"})
+    return generic_del_tag(SampleBook, request, pk) # change model to ArbitraryPainting
 
 """
 Each view function from app/`views.py` related to a particular model should be imported into app/`urls.py`. The views can be consolidated to a single pattern based on a `Pathmaker` helper dataclass defined in bookmark/utils.py.

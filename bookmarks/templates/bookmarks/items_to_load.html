@@ -1,13 +1,13 @@
-{% if username %}
-    {% for item in items_to_load %}
-        <div hx-trigger="load" hx-get="{{item.get_item_url}}/{{username}}">
-            {% include 'commons/_panel.html' %}
+{% for item in items_to_load %}
+    <div
+        hx-trigger="load"
+        hx-get="{{item.get_item_url}}{% if username %}/{{username}}{% endif %}">
+        {% include 'commons/_panel.html' %}
+    </div>
+{% empty %}
+    <div class="card">
+        <div class="card-body">
+            None Found
         </div>
-    {% endfor %}
-{% else %}
-    {% for item in items_to_load %}
-        <div hx-trigger="load" hx-get="{{item.get_item_url}}">
-            {% include 'commons/_panel.html' %}
-        </div>
-    {% endfor %}
-{% endif %}
+    </div>
+{% endfor %}
