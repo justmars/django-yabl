@@ -16,28 +16,13 @@ class User(AbstractUser):
 
     @property
     def saved_books(self):
-        from bookmarks.models import Bookmark
         from examples.models import SampleBook
 
-        ct = ContentType.objects.get(app_label="examples", model="samplebook")
-        return SampleBook.objects.filter(
-            id__in=list(
-                Bookmark.objects.filter(
-                    content_type=ct, bookmarker=self
-                ).values_list("object_id", flat=True)
-            )
-        )
+        return SampleBook.get_bookmarks_by_user(self)
 
     @property
     def saved_quotes(self):
-        from bookmarks.models import Bookmark
+
         from examples.models import SampleQuote
 
-        ct = ContentType.objects.get(app_label="examples", model="samplequote")
-        return SampleQuote.objects.filter(
-            id__in=list(
-                Bookmark.objects.filter(
-                    content_type=ct, bookmarker=self
-                ).values_list("object_id", flat=True)
-            )
-        )
+        return SampleQuote.get_bookmarks_by_user(self)

@@ -303,3 +303,25 @@ class AbstractBookmarkable(models.Model):
         bookmark = self.bookmarks.get(bookmarker=user)
         if bookmark.tags.filter(name=slug).exists():
             bookmark.tags.remove(tag_to_remove)
+
+    @classmethod
+    def get_bookmarks_by_user(cls, user):
+        """Get the inheriting model `cls` instances that the user has bookmarked."""
+
+        # what is the inheriting model?
+        ct = ContentType.objects.get(
+            app_label=cls._meta.app_label,
+            model=cls._meta.model_name,
+        )
+
+        # what are the ids of the inheriting model that are included in the Bookmarks queryset
+        bookmark_ids: list[str] = list(
+            Bookmark.objects.filter(
+                content_type=ct,
+                bookmarker=user,
+            ).values_list("object_id", flat=True)
+        )
+
+        # filter the instances from the ids
+        instances = cls.objects.filter(id__in=bookmark_ids)
+        return instances
