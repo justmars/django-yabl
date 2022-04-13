@@ -1,10 +1,10 @@
 # django-yabl
 
-Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models.
+Yet another bookmarking library (yabl) for Django. Bookmark and tag arbitrary models using a `AbstractBookmarkable` on user-created models. This enables these inheriting "child" (concrete) models – e.g. _Movies, Books, Laws, Clothes, etc._ – to have automatically generated properties for bookmarking and tagging of users with an existing account. In other words: the abstraction makes each inheriting instance _bookmarkable_ and _taggable_ by authenticated users.
 
-`AbstractBookmarkable` contains `bookmarks` field. This enables arbitrary child models, e.g. Movies, Books, Laws, Clothes, etc., to inherit uniform properties for bookmarking and tagging.
+## The `bookmarks` field
 
-The `bookmarks` field is mapped to a generic `Bookmark` model containing:
+Each inheriting model will contain a `bookmarks` field. This is mapped to a generic `Bookmark` model containing:
 
 1. the authenticated user adding the bookmark, i.e. the `bookmarker`;
 2. the concrete model instance referenced, i.e. the _bookmarked_;[^1] and
@@ -12,9 +12,7 @@ The `bookmarks` field is mapped to a generic `Bookmark` model containing:
 
 [^1]: The model is referenced via a `content_type` and an `object_id`
 
-## AbstractBookmarkable
-
-The abstraction makes each inheriting instance _bookmarkable_ and _taggable_ by authenticated users.
+## The `AbstractBookmarkable` attributes & methods
 
 | Attributes                        | Purpose                                                    |
 | --------------------------------- | ---------------------------------------------------------- |
