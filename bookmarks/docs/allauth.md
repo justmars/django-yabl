@@ -2,7 +2,7 @@
 
 ## Install
 
-```python
+```py
 # config/settings.py
 INSTALLED_APPS = [
     ...
@@ -16,7 +16,7 @@ INSTALLED_APPS = [
 
 ## Configure
 
-```python
+```py
 # config/settings.py
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -32,7 +32,7 @@ LOGIN_REDIRECT_URL = "/"
 
 ## Add URL
 
-```python
+```py
 # urls.py
 urlpatterns = [
     ...
@@ -45,7 +45,7 @@ urlpatterns = [
 
 Add `templates` root directory:
 
-```python
+```py
 TEMPLATES = [
     {
         ...

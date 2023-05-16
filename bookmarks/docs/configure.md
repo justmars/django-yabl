@@ -19,6 +19,8 @@ Let's assume an `examples` app containing a `SampleBook` model:
 ```python
 # examples/models.py
 from bookmarks.models import AbstractBookmarkable
+
+
 class SampleBook(AbstractBookmarkable):
     ...
 ```
@@ -31,6 +33,7 @@ Add a `verbose_name` to `Meta.options` so that if referenced via its `Content_Ty
 # examples/models.py
 class SampleBook(AbstractBookmarkable):
     ...
+
     class Meta:
         verbose_name = "Book"  # see generic relations, e.g. content_type.name
         verbose_name_plural = "Books"
@@ -42,13 +45,19 @@ Each display will be different because each model will have different fields / d
 
 ```python
 # examples/models.py
-from django.utils.html import format_html # new
-from django.utils.safestring import SafeText # new
+from django.utils.html import format_html  # new
+from django.utils.safestring import SafeText  # new
+
 
 class SampleBook(AbstractBookmarkable):
     ...
+
     @property
-    def object_content_for_panel(self) -> SafeText: # customizes appearance of a specific book when appearing via (a) the launch_modal_func or (b) the get_item_func
+    def object_content_for_panel(
+        self,
+    ) -> (
+        SafeText
+    ):  # customizes appearance of a specific book when appearing via (a) the launch_modal_func or (b) the get_item_func
         return format_html(
             """
             <h2>{title}</h2>
@@ -68,8 +77,13 @@ class SampleBook(AbstractBookmarkable):
 from .models import SampleBook
 from bookmarks.utils import Pathmaker
 from .apps import ExamplesConfig
-app_name = ExamplesConfig.name # will match SampleBook.objects.get(pk=1)._meta.app_label
-urlpatterns = Pathmaker(SampleBook).make_patterns() + [..., ] # add helper method to the original list
+
+app_name = (
+    ExamplesConfig.name
+)  # will match SampleBook.objects.get(pk=1)._meta.app_label
+urlpatterns = Pathmaker(SampleBook).make_patterns() + [
+    ...,
+]  # add helper method to the original list
 ```
 
 The reason for the matching requirement is that `django.urls.reverse()` functions will rely on this convention to call urls from the object instance with a pre-determined property value, e.g.:
@@ -87,7 +101,7 @@ The reason for the matching requirement is that `django.urls.reverse()` function
 
 One of the paths created in `make_patterns()` is the `launch_modal` path which can be customized by the model's `@modal` property; or the same template can be modified to be more customized as long as url is set.
 
-```python
+```py
 class SampleBook(AbstractBookmarkable)
     ...
 

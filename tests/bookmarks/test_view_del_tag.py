@@ -4,8 +4,13 @@ import pytest
 from django.http.response import HttpResponse
 from django.urls import reverse
 
-ENDPOINT = lambda x: f"/samplebook/del_tag/{x}"
-ROUTE = lambda x: reverse("examples:del_tag_samplebook", kwargs={"pk": x})
+
+def ENDPOINT(x):
+    return f"/samplebook/del_tag/{x}"
+
+
+def ROUTE(x):
+    return reverse("examples:del_tag_samplebook", kwargs={"pk": x})
 
 
 @pytest.mark.django_db

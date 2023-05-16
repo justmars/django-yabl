@@ -7,8 +7,13 @@ from django.urls import reverse
 
 from bookmarks.utils import MODAL_BASE
 
-ENDPOINT = lambda x: f"/samplebook/launch_modal/{x}"
-ROUTE = lambda x: reverse("examples:launch_modal_samplebook", kwargs={"pk": x})
+
+def ENDPOINT(x):
+    return f"/samplebook/launch_modal/{x}"
+
+
+def ROUTE(x):
+    return reverse("examples:launch_modal_samplebook", kwargs={"pk": x})
 
 
 @pytest.mark.django_db
@@ -29,9 +34,7 @@ def test_launch_modal_anonymous_redirected_since_login_required(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("format_url", [ENDPOINT, ROUTE])
-def test_launch_modal_authenticated(
-    client, format_url, item, potential_bookmarker
-):
+def test_launch_modal_authenticated(client, format_url, item, potential_bookmarker):
     client.force_login(potential_bookmarker)
     response = client.get(format_url(item.id))
     assert isinstance(response, TemplateResponse)

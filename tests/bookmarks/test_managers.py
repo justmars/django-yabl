@@ -13,13 +13,9 @@ def test_bookmarked_qs_no_model_id(potential_bookmarker, item_with_tags):
 
 
 @pytest.mark.django_db
-def test_bookmarked_qs_with_model_id(
-    potential_bookmarker, item_with_tags, model_id
-):
+def test_bookmarked_qs_with_model_id(potential_bookmarker, item_with_tags, model_id):
     tag = TagItem.objects.get(name="omega")
-    qs = Bookmark.objects_tagged.extract_from(
-        potential_bookmarker, tag, model_id
-    )
+    qs = Bookmark.objects_tagged.extract_from(potential_bookmarker, tag, model_id)
     assert isinstance(qs, QuerySet)
     assert qs.count() == 1
 

@@ -50,7 +50,8 @@ class TagItem(TimeStampedModel):
 
     @classmethod
     def set_context(cls, user, tag_slug: str, model_id: Optional[int] = None):
-        """The `tag_slug` (and optional `model_id`) from url refer to objects requesting `user` has previously tagged. If user is not authenticated, show empty list."""
+        """The `tag_slug` (and optional `model_id`) from url refer to objects requesting
+        `user` has previously tagged. If user is not authenticated, show empty list."""
         context = {}
         if model_id:
             context["model_type"] = ContentType.objects.get_for_id(model_id)
@@ -85,16 +86,15 @@ class Bookmark(TimeStampedModel):
 
 
 class AbstractBookmarkable(models.Model):
-    bookmarks = GenericRelation(
-        Bookmark, related_query_name="%(app_label)s_%(class)ss"
-    )
+    bookmarks = GenericRelation(Bookmark, related_query_name="%(app_label)s_%(class)ss")
 
     class Meta:
         abstract = True
 
     @property
     def modal(self) -> SafeText:
-        """Return html with htmx modal launcher based on app_name. Presumes prior coordination with bookmarks.utils in urls.py"""
+        """Return html with htmx modal launcher based on app_name. Presumes prior
+        coordination with bookmarks.utils in urls.py"""
         raw = """<span
                 class="bi bi-chevron-right"
                 hx-trigger="click"
@@ -109,7 +109,7 @@ class AbstractBookmarkable(models.Model):
                 <span id="{loader_id}" class="spinner-border spinner-border-sm htmx-indicator" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </span>
-            """
+            """  # noqa: E501
         return format_html(
             raw, loader_id=f"spinner-{self.pk}", url=self.launch_modal_url
         )
@@ -121,7 +121,8 @@ class AbstractBookmarkable(models.Model):
         return format_html(raw, model_name=self._meta.model_name)
 
     def make_action_url(self, act: str):
-        """Helper function to help generate urlpattern routes for bookmarking and tagging"""
+        """Helper function to help generate urlpattern routes for bookmarking and
+        tagging"""
         base = f"{self._meta.app_label}:{act}_{self._meta.model_name}"
         return reverse(base, args=(self.pk,))
 
@@ -131,10 +132,9 @@ class AbstractBookmarkable(models.Model):
         return self.make_action_url(LAUNCH_MODAL)
 
     @classmethod
-    def launch_modal_func(
-        cls, request: HttpRequest, pk: str
-    ) -> TemplateResponse:
-        """Launches the modal with the overriden @object_content_for_panel, containing tagging and bookmarking functions"""
+    def launch_modal_func(cls, request: HttpRequest, pk: str) -> TemplateResponse:
+        """Launches the modal with the overriden @object_content_for_panel, containing
+        tagging and bookmarking functions"""
         if not request.method == "GET":
             raise BadRequest
         if not request.user.is_authenticated:
@@ -157,16 +157,15 @@ class AbstractBookmarkable(models.Model):
         pk: str,
         user_slug: Optional[str] = None,
     ):
-        """Loads the overriden @object_content_for_panel with tagging and bookmarking functions"""
+        """Loads the overriden @object_content_for_panel with tagging and bookmarking
+        functions"""
         if not request.method == "GET":
             raise BadRequest
 
         obj = get_object_or_404(cls, pk=pk)
         context = {}
         if user_slug:
-            if user_found := get_object_or_404(
-                get_user_model(), username=user_slug
-            ):
+            if user_found := get_object_or_404(get_user_model(), username=user_slug):
                 context = obj.set_bookmarked_context(user_found)
         else:
             if request.user.is_authenticated:
@@ -217,10 +216,9 @@ class AbstractBookmarkable(models.Model):
         return self.make_action_url(TOGGLE_STATUS)
 
     @classmethod
-    def toggle_status_func(
-        cls, request: HttpRequest, pk: str
-    ) -> TemplateResponse:
-        """Toggles the requesting user's preference re: bookmarked status of the object"""
+    def toggle_status_func(cls, request: HttpRequest, pk: str) -> TemplateResponse:
+        """Toggles the requesting user's preference re: bookmarked status of
+        the object"""
         if not request.method == "PUT":
             return HttpResponseRedirect(settings.LOGIN_URL)
         if not request.user.is_authenticated:
@@ -232,7 +230,10 @@ class AbstractBookmarkable(models.Model):
         return TemplateResponse(request, PANEL, context)
 
     def set_bookmarked_context(self, user) -> dict:
-        """The tag PANEL in bookmarks/utils.py requires the use of certain variables that will not change, e.g. `is_bookmarked`, `toggle_url`. The values that fill these constants however will change based on the object instance `obj` and the `user` that is passed to this method."""
+        """The tag PANEL in bookmarks/utils.py requires the use of certain variables
+        that will not change, e.g. `is_bookmarked`, `toggle_url`. The values that fill
+        these constants however will change based on the object instance `obj` and the
+        `user` that is passed to this method."""
         return {
             "object": self,
             "object_content_for_panel": self.object_content_for_panel,
@@ -266,7 +267,8 @@ class AbstractBookmarkable(models.Model):
         return self._unbookmark_this(user)
 
     def _unbookmark_this(self, user) -> bool:
-        """Implies `user` already bookmarked to the instance. This removes the `bookmark` object from the instance's `bookmarks` field."""
+        """Implies `user` already bookmarked to the instance. This removes the
+        `bookmark` object from the instance's `bookmarks` field."""
         bookmark = self.get_bookmarked(user)
         self.bookmarks.remove(bookmark)
         if tags := self.get_user_tags(user):
@@ -274,13 +276,15 @@ class AbstractBookmarkable(models.Model):
         return self.is_bookmarked(user)  # status after unbookmarking
 
     def _bookmark_this(self, user) -> bool:
-        """Implies `user` is not yet bookmarked to the instance. This add a `bookmark` object to the instance's `bookmarks` field."""
+        """Implies `user` is not yet bookmarked to the instance. This add a `bookmark`
+        object to the instance's `bookmarks` field."""
         bookmark = Bookmark(content_object=self, bookmarker=user)
         self.bookmarks.add(bookmark, bulk=False)
         return self.is_bookmarked(user)  # status after bookmark
 
     def add_tags(self, user, tags_to_add: list[str]):
-        """Parse a list of `tags_to_add`, by a `user` to an auto-bookmarked model instance."""
+        """Parse a list of `tags_to_add`, by a `user` to an auto-bookmarked model
+        instance."""
         if not self.is_bookmarked(user):  # auto-bookmark
             self._bookmark_this(user)
 
@@ -293,7 +297,8 @@ class AbstractBookmarkable(models.Model):
                 bookmark.tags.add(tag_obj)
 
     def remove_tag(self, user, tag_to_remove: str):
-        """Since bookmarked instance can have existing tags, enable user to remove an existing tag name."""
+        """Since bookmarked instance can have existing tags, enable user to remove an
+        existing tag name."""
         slug = slugify(tag_to_remove)
         tag_to_remove = get_object_or_404(TagItem, name=slug)
 
@@ -314,7 +319,8 @@ class AbstractBookmarkable(models.Model):
             model=cls._meta.model_name,
         )
 
-        # what are the ids of the inheriting model that are included in the Bookmarks queryset
+        # what are the ids of the inheriting model that are included in the Bookmarks
+        # queryset
         bookmark_ids: list[str] = list(
             Bookmark.objects.filter(
                 content_type=ct,

@@ -8,7 +8,8 @@ from django.db.models.query import QuerySet
 
 class UserAnnotations(models.Manager):
     def filter_by_user(self, user) -> QuerySet:
-        """Get all tags in which the `user` has bookmarked to a bookmarked model instance."""
+        """Get all tags in which the `user` has bookmarked to a bookmarked model
+        instance."""
         qs = (
             super()
             .get_queryset()
@@ -20,9 +21,11 @@ class UserAnnotations(models.Manager):
         return qs
 
     def prep_for_annotation(self, user, model: models.Model):
-        """Using the prefix of the model `label`, generate values for `_count`, `_id`, and `_slug`.
+        """Using the prefix of the model `label`, generate values for `_count`, `_id`,
+        and `_slug`.
 
-        e.g if the model is `SampleBook`, the generated keys are `samplebook_count`, `samplebook_id`, and `samplebook_slug`.
+        e.g if the model is `SampleBook`, the generated keys are `samplebook_count`,
+        `samplebook_id`, and `samplebook_slug`.
 
         1. The `_id` refers to the `contenttype` id.
         2. The `_slug` refers to the lowercased name of the model.
@@ -40,7 +43,8 @@ class UserAnnotations(models.Manager):
         }
 
     def made_by_user(self, user, models: list[models.Model]) -> QuerySet:
-        """Tags filtered by user then each tag is annotated with different contenttypes."""
+        """Tags filtered by user then each tag is annotated with different
+        contenttypes."""
         qs = self.filter_by_user(user)
         for model in models:
             values = self.prep_for_annotation(user, model)
@@ -50,7 +54,8 @@ class UserAnnotations(models.Manager):
 
 class MarkedTags(models.Manager):
     def _bookmarker_by_user(self, user):
-        """Each user may have bookmarked objects. This fetches all bookmarks made by a specific user."""
+        """Each user may have bookmarked objects. This fetches all bookmarks made by a
+        specific user."""
         return (
             super()
             .get_queryset()
@@ -60,13 +65,12 @@ class MarkedTags(models.Manager):
             .distinct()
         )
 
-    def extract_from(
-        self, user, tag, content_id: Optional[int] = None
-    ) -> QuerySet:
-        """bookmarks tagged by the `user` with a `tag_slug`. The resulting queryset can be of different models since the `bookmark` model is generic; but if `content_id` is set, the instances must be of the same contenttype model represented by the `content_id`."""
+    def extract_from(self, user, tag, content_id: Optional[int] = None) -> QuerySet:
+        """bookmarks tagged by the `user` with a `tag_slug`. The resulting queryset can
+        be of different models since the `bookmark` model is generic; but if
+        `content_id` is set, the instances must be of the same contenttype model
+        represented by the `content_id`."""
         qs = self._bookmarker_by_user(user).filter(tags=tag)
         if content_id:
-            qs = qs.filter(
-                content_type=ContentType.objects.get_for_id(content_id)
-            )
+            qs = qs.filter(content_type=ContentType.objects.get_for_id(content_id))
         return qs

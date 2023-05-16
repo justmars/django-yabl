@@ -21,9 +21,7 @@ class SampleBook(AbstractBookmarkable):
         verbose_name_plural = "Books"
 
     def __str__(self) -> str:
-        return (
-            f"{self.title} by {self.author.first_name} {self.author.last_name}"
-        )
+        return f"{self.title} by {self.author.first_name} {self.author.last_name}"
 
     def get_absolute_url(self):
         return reverse("examples:book_detail", kwargs={"pk": self.pk})

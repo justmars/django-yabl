@@ -8,9 +8,7 @@ from examples.models import SampleBook
 
 @pytest.fixture
 def author():
-    return get_user_model().objects.create_user(
-        username="juan", password="bar"
-    )
+    return get_user_model().objects.create_user(username="juan", password="bar")
 
 
 @pytest.fixture
@@ -26,9 +24,7 @@ def model_id(author) -> int:
 
 @pytest.fixture
 def potential_bookmarker():
-    return get_user_model().objects.create_user(
-        username="maria", password="bar"
-    )
+    return get_user_model().objects.create_user(username="maria", password="bar")
 
 
 @pytest.fixture

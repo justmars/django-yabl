@@ -45,9 +45,7 @@ def test_view_annotated_tags(client, potential_bookmarker, item_with_tags):
 
 
 @pytest.mark.django_db
-def test_view_filtered_list(
-    client, potential_bookmarker, item_with_tags, model_id
-):
+def test_view_filtered_list(client, potential_bookmarker, item_with_tags, model_id):
     kwargs = {"tag_slug": "omega", "model_id": model_id}
     url = reverse("bookmarks:filter_objects_by_tag_models", kwargs=kwargs)
     client.force_login(potential_bookmarker)

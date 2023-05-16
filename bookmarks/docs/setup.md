@@ -11,7 +11,7 @@
 
 [Setup](bookmarks/docs/allauth.md) django allauth first for simple authentication urls / views / templates/.
 
-```python
+```py
 # settings.py
 INSTALLED_APPS = [
     ...
@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
 ## Add bookmarks urls
 
-```python
+```py
 # urls.py
 urlpatterns = [
     ...

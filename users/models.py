@@ -10,9 +10,7 @@ class User(AbstractUser):
         return self.username
 
     def get_absolute_url(self):
-        return reverse(
-            "users:get_user_profile", kwargs={"username": self.username}
-        )
+        return reverse("users:get_user_profile", kwargs={"username": self.username})
 
     @property
     def saved_books(self):
@@ -22,7 +20,6 @@ class User(AbstractUser):
 
     @property
     def saved_quotes(self):
-
         from examples.models import SampleQuote
 
         return SampleQuote.get_bookmarks_by_user(self)

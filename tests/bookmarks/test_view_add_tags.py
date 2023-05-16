@@ -7,8 +7,13 @@ from django.urls import reverse
 
 from bookmarks.utils import PANEL
 
-ENDPOINT = lambda x: f"/samplebook/add_tags/{x}"
-ROUTE = lambda x: reverse("examples:add_tags_samplebook", kwargs={"pk": x})
+
+def ENDPOINT(x):
+    return f"/samplebook/add_tags/{x}"
+
+
+def ROUTE(x):
+    return reverse("examples:add_tags_samplebook", kwargs={"pk": x})
 
 
 @pytest.mark.django_db
